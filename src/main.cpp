@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <openWav.hpp>
 #include "imgui/imgui.h"
 #include "imgui-sfml/imgui-SFML.h"
 
@@ -24,7 +25,9 @@ int main()
         ImGui::SFML::Update(window, delta.restart());
 
         ImGui::Begin("hello world");
-        ImGui::Button("button text", ImVec2(10, 10));
+        ImGui::Text("z key is pressed? = ");
+        ImGui::Text(std::to_string(ImGui::IsKeyPressed(ImGuiKey_Z)).c_str());
+        ImGui::Button("button text", ImVec2(0, 0));
         ImGui::End();
 
         window.clear();

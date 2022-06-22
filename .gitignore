@@ -8,3 +8,5 @@ src/*.ini
 src/*.txt
 src/Makefile
 src/examples
+
+.vscode/
