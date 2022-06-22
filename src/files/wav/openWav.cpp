@@ -11,30 +11,45 @@ Wav::Wav(std::string path)
     file.seekg(0, file.beg);
 
     // copy data to a buffer
-    std::shared_ptr<char> buffer(new char[length], std::default_delete<char[]>());
+    std::shared_ptr<uint8_t> bufferData(new uint8_t[length], std::default_delete<uint8_t[]>());
     //char * buffer = new char [length];
-    file.read(buffer.get(), length);
+    file.read( (char *)bufferData.get(), length );
 
-    if(!checkRiff(buffer)){
-        return;
-    }
+    buffer = bufferData;
 
     
 }
 
-bool Wav::checkRiff(std::shared_ptr<char> bufferPtr)
+bool Wav::checkValid()
 {
-    // copy the riff part into a char array
-    char value[4];
-    value[0] = bufferPtr.get()[0];
-    value[1] = bufferPtr.get()[1];
-    value[2] = bufferPtr.get()[2];
-    value[3] = bufferPtr.get()[3];
+    bool isValid = true;
+    CHECK_BOOL(isValid, checkRiff());
 
+    return isValid;
+}
+
+bool Wav::checkRiff()
+{
+    // copy the first riff part into a char array
+    char value[4];
+    value[0] = buffer.get()[0];
+    value[1] = buffer.get()[1];
+    value[2] = buffer.get()[2];
+    value[3] = buffer.get()[3];
+
+    // check
     if(value == "RIFF"){
         return 1;
     }
     return 0;
+}
+
+int Wav::getSize()
+{
+    u_int32_t size;
+    size = *((u_int32_t*) (buffer.get() + OFFSET_TO_SIZE) );
+
+    return size;
 }
 
 Wav::~Wav()

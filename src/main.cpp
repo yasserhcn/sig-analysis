@@ -11,6 +11,8 @@ int main()
 
     ImGui::SFML::Init(window);
 
+    Wav x("test.wav");
+
     sf::Clock delta;
     while (window.isOpen())
     {
@@ -25,8 +27,7 @@ int main()
         ImGui::SFML::Update(window, delta.restart());
 
         ImGui::Begin("hello world");
-        ImGui::Text("z key is pressed? = ");
-        ImGui::Text(std::to_string(ImGui::IsKeyPressed(ImGuiKey_Z)).c_str());
+        ImGui::Text(std::to_string(x.getSize()).c_str());
         ImGui::Button("button text", ImVec2(0, 0));
         ImGui::End();
 
