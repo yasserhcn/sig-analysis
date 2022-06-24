@@ -27,7 +27,7 @@ int main()
         ImGui::SFML::Update(window, delta.restart());
 
         ImGui::Begin("hello world");
-        ImGui::Text(std::to_string(x.getSize()).c_str());
+        ImGui::Text(std::to_string(x.debugVal()).c_str());
         ImGui::Button("button text", ImVec2(0, 0));
         ImGui::End();
 

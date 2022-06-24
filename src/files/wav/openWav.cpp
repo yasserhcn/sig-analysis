@@ -1,7 +1,7 @@
 #include <openWav.hpp>
 
 
-Wav::Wav(std::string path)
+Wav::Wav(std::string path, bool autoParse)
 {
     std::ifstream file(path, std::ifstream::binary);
 
@@ -17,7 +17,10 @@ Wav::Wav(std::string path)
 
     buffer = bufferData;
 
-    
+    if(autoParse)
+    {
+        parseFmt();
+    }
 }
 
 bool Wav::checkValid()
@@ -26,6 +29,12 @@ bool Wav::checkValid()
     CHECK_BOOL(isValid, checkRiff());
 
     return isValid;
+}
+
+void Wav::parseFmt()
+{
+    bool riffValid = checkRiff();
+    getHeaderSize();
 }
 
 bool Wav::checkRiff()
@@ -38,18 +47,23 @@ bool Wav::checkRiff()
     value[3] = buffer.get()[3];
 
     // check
-    if(value == "RIFF"){
+    if(value == riffChunk.chunkId){
         return 1;
     }
     return 0;
 }
 
-int Wav::getSize()
+int Wav::getHeaderSize()
 {
     u_int32_t size;
     size = *((u_int32_t*) (buffer.get() + OFFSET_TO_SIZE) );
-
+    riffChunk.chunkDataSize = size;
     return size;
+}
+
+int Wav::debugVal()
+{
+    return riffChunk.chunkDataSize;
 }
 
 Wav::~Wav()
