@@ -35,7 +35,8 @@ public:
      * 
      * @return int value
      */
-    int debugVal();
+    uint32_t debugVal();
+    char debugVar[4];
 
     ~Wav();
 private:
@@ -55,8 +56,8 @@ private:
         uint32_t chunkSize = 0;
         u_int8_t audioFormat;
         u_int8_t numChannels;
-        u_int32_t sampleRate;
-        u_int32_t byteRate;
+        uint32_t sampleRate;
+        uint32_t byteRate;
         u_int8_t blockAlign;
         u_int8_t bitsPerSample;
     }fmtChunk;
@@ -93,5 +94,54 @@ private:
      * @return int size
      */
     int getHeaderSize();
+
+    /**
+     * @brief check if the file is wave
+     * 
+     * @return true if file is valid
+     */
+    bool checkWav();
+
+    /**
+     * @brief check if the fmt id is valid
+     * 
+     * @return true when valid
+     */
+    bool checkFmtId();
+
+    /**
+     * @brief get the size in the fmt header
+     * 
+     * @return int size
+     */
+    int getFmtSize();
+
+    /**
+     * @brief get thee audio format
+     * 
+     * @return int with format value
+     */
+    int getFmtFormat();
+
+    /**
+     * @brief get the number of channels in the file
+     * 
+     * @return int with the number of channels
+     */
+    int getFmtNumChannels();
+
+    /**
+     * @brief get the sample rate
+     * 
+     * @return int with the sample rate
+     */
+    int getFmtSampleRate();
+
+    /**
+     * @brief get the byte rate
+     * 
+     * @return int with the bytee rate
+     */
+    int getFmtByteRate();
 };
 
