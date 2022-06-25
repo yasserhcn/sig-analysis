@@ -45,7 +45,7 @@ void Wav::parseFmt()
     getFmtSize();
     getFmtFormat();
     getFmtNumChannels();
-    getFmtByteRate();
+    getFmtSampleRate();
     getFmtByteRate();
 }
 
@@ -121,8 +121,8 @@ bool Wav::checkFmtId()
 
 int Wav::getFmtSize()
 {
-    u_int32_t size;
-    size = *((u_int32_t*) (buffer.get() + OFFSET_TO_FMT + 4) );
+    uint32_t size;
+    size = *((uint32_t*) (buffer.get() + OFFSET_TO_FMT + 4) );
     fmtChunk.chunkSize = size;
     return size;
 }
@@ -145,10 +145,10 @@ int Wav::getFmtNumChannels()
     return size;
 }
 
-int Wav::getFmtSampleRate()
+u_int32_t Wav::getFmtSampleRate()
 {
-    uint32_t size;
-    size = *((uint32_t*) (buffer.get() + OFFSET_TO_FMT + 14) );
+    u_int32_t size;
+    size = *((u_int32_t*) (buffer.get() + OFFSET_TO_FMT + 12) );
     fmtChunk.sampleRate = size;
     return size;
 }
@@ -161,7 +161,7 @@ int Wav::getFmtByteRate()
     return size;
 }
 
-uint32_t Wav::debugVal()
+u_int32_t Wav::debugVal()
 {
     return fmtChunk.sampleRate;
 }

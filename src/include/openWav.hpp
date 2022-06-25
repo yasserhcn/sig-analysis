@@ -35,7 +35,7 @@ public:
      * 
      * @return int value
      */
-    uint32_t debugVal();
+    u_int32_t debugVal();
     char debugVar[4];
 
     ~Wav();
@@ -56,7 +56,7 @@ private:
         uint32_t chunkSize = 0;
         u_int8_t audioFormat;
         u_int8_t numChannels;
-        uint32_t sampleRate;
+        u_int32_t sampleRate;
         uint32_t byteRate;
         u_int8_t blockAlign;
         u_int8_t bitsPerSample;
@@ -135,7 +135,7 @@ private:
      * 
      * @return int with the sample rate
      */
-    int getFmtSampleRate();
+    u_int32_t getFmtSampleRate();
 
     /**
      * @brief get the byte rate
