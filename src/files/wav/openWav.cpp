@@ -47,6 +47,8 @@ void Wav::parseFmt()
     getFmtNumChannels();
     getFmtSampleRate();
     getFmtByteRate();
+    getFmtBlockAlign();
+    getFmtBitsPerSample();
 }
 
 bool Wav::checkRiff()
@@ -158,6 +160,24 @@ int Wav::getFmtByteRate()
     uint32_t size;
     size = *((uint32_t*) (buffer.get() + OFFSET_TO_FMT + 16) );
     fmtChunk.byteRate = size;
+    return size;
+}
+
+int Wav::getFmtBlockAlign()
+{
+    uint16_t size;
+    size = *((uint16_t*) (buffer.get() + OFFSET_TO_FMT + 20) );
+    fmtChunk.blockAlign = size;
+    debugVar[2] = size;
+    return size;
+}
+
+int Wav::getFmtBitsPerSample()
+{
+    uint16_t size;
+    size = *((uint16_t*) (buffer.get() + OFFSET_TO_FMT + 22) );
+    fmtChunk.bitsPerSample = size;
+    debugVar[3] = size;
     return size;
 }
 

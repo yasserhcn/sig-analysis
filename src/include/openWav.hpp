@@ -143,5 +143,19 @@ private:
      * @return int with the bytee rate
      */
     int getFmtByteRate();
+
+    /**
+     * @brief get thte block align value
+     * 
+     * @return int with the value of block align
+     */
+    int getFmtBlockAlign();
+
+    /**
+     * @brief get the bits per sample field
+     * 
+     * @brief int with the amount of bits per sample
+     */
+    int getFmtBitsPerSample();
 };
 
