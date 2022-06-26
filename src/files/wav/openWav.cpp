@@ -1,4 +1,4 @@
-#include <openWav.hpp>
+#include <files/openWav.hpp>
 
 
 Wav::Wav(std::string path, bool autoParse)
