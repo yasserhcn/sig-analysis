@@ -1,15 +1,17 @@
 #include <SFML/Graphics.hpp>
-#include <openWav.hpp>
+#include <files/openWav.hpp>
+#include <display/window.hpp>
 #include "imgui/imgui.h"
 #include "imgui-sfml/imgui-SFML.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(700, 500), "SFML works!");
 
     ImGui::SFML::Init(window);
 
     Wav x("test.wav");
+    disp y(&window);
 
     sf::Clock delta;
     while (window.isOpen())
@@ -34,6 +36,7 @@ int main()
         ImGui::End();
 
         window.clear();
+        y.update();
         ImGui::SFML::Render(window);
         window.display();
     }

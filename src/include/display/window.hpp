@@ -22,4 +22,10 @@ public:
 private:
     sf::RenderWindow *window;
 
+    sf::VertexArray waveFormDebugLine;
+
+    void updateDebugLine(); 
+    void generateDebugData();
+    char debugData[100];
+
 };
