@@ -10,7 +10,14 @@ disp::disp(sf::RenderWindow *windowIn)
 void disp::update()
 {
     updateDebugLine();
-    window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
+    x->update();
+    //window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
+    x->draw(window);
+}
+
+void disp::event(sf::Event e)
+{
+    
 }
 
 void disp::updateDebugLine()
@@ -28,6 +35,7 @@ void disp::generateDebugData()
     for (int i = 0; i < 100; i++)
     {
         debugData[i] = rand()%255;
+        x->addValue(debugData[i]);
     }
     
 }

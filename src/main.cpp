@@ -20,6 +20,10 @@ int main()
         while (window.pollEvent(event))
         {
             ImGui::SFML::ProcessEvent(event);
+            if( !ImGui::GetIO().WantCaptureMouse)
+            {
+                y.event(event);
+            }
             if (event.type == sf::Event::Closed)
                 window.close();
         }

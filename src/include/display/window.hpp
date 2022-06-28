@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <display/tab.hpp>
 
 class disp
 {
@@ -18,9 +19,18 @@ public:
      */
     void update();
 
+    /**
+     * @brief called when there's a window event
+     * 
+     * @param e the event
+     */
+    void event(sf::Event e);
+
     ~disp();
 private:
     sf::RenderWindow *window;
+
+    std::unique_ptr<waveForm> x = std::make_unique<waveForm>();
 
     sf::VertexArray waveFormDebugLine;
 
@@ -28,4 +38,5 @@ private:
     void generateDebugData();
     char debugData[100];
 
+    
 };
