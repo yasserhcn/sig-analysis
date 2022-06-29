@@ -34,11 +34,8 @@ private:
 
     std::unique_ptr<waveForm> x = std::make_unique<waveForm>();
 
-    sf::VertexArray waveFormDebugLine;
-
-    void updateDebugLine(); 
     void generateDebugData();
-    char debugData[100];
+    char debugData[1000];
 
     
 };
