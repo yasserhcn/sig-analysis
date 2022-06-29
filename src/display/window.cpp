@@ -1,7 +1,7 @@
 #include <display/window.hpp>
 
 
-disp::disp(sf::RenderWindow *windowIn)
+disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 :window(windowIn)
 {
     generateDebugData();

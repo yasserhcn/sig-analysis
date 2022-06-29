@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class tab
 {
@@ -42,7 +43,7 @@ public:
      * @brief draw the waveform
      * 
      */
-    void draw(sf::RenderWindow *windowIn);
+    void draw(std::shared_ptr<sf::RenderWindow> windowIn);
 
     /**
      * @brief update the current waveform drawing

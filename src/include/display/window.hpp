@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <display/tab.hpp>
+#include <memory>
 
 class disp
 {
@@ -11,7 +12,7 @@ public:
      * 
      * @param windowIn pointer to the window
      */
-    disp(sf::RenderWindow *windowIn);
+    disp(std::shared_ptr<sf::RenderWindow> windowIn);
 
     /**
      * @brief runs every tick, updates and draws the current running window
@@ -28,7 +29,8 @@ public:
 
     ~disp();
 private:
-    sf::RenderWindow *window;
+    //sf::RenderWindow *window;
+    std::shared_ptr<sf::RenderWindow> window;
 
     std::unique_ptr<waveForm> x = std::make_unique<waveForm>();
 

@@ -20,7 +20,7 @@ void waveForm::addValue(u_int64_t val)
     dataPoints.push_back(val);
 }
 
-void waveForm::draw(sf::RenderWindow *windowIn)
+void waveForm::draw(std::shared_ptr<sf::RenderWindow> windowIn)
 {
     windowIn->draw(&graph[0], graph.getVertexCount(), sf::LineStrip);
 }
