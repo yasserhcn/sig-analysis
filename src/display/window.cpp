@@ -20,29 +20,50 @@ void disp::event(sf::Event e)
 {
     if(e.type == sf::Event::KeyPressed)
     {
-        // move up
-        if(e.key.code == sf::Keyboard::Up && !e.key.shift)
+        if(!e.key.shift)
         {
-            moveView(sf::Vector2f(0, -10));
-        }
+            int moveAmount = 10;
+            if(e.key.control)
+            {
+                moveAmount = 80;
+            }
+            // move up
+            if(e.key.code == sf::Keyboard::Up)
+            {
+                moveView(sf::Vector2f(0, -moveAmount));
+            }
 
-        // move down
-        if(e.key.code == sf::Keyboard::Down && ! e.key.shift)
-        {
-            moveView(sf::Vector2f(0, 10));
-        }
+            // move down
+            if(e.key.code == sf::Keyboard::Down)
+            {
+                moveView(sf::Vector2f(0, moveAmount));
+            }
 
-        // move left
-        if(e.key.code == sf::Keyboard::Left && !e.key.shift)
-        {
-            moveView(sf::Vector2f(-10, 0));
-        }
+            // move left
+            if(e.key.code == sf::Keyboard::Left)
+            {
+                moveView(sf::Vector2f(-moveAmount, 0));
+            }
 
-        // move right
-        if(e.key.code == sf::Keyboard::Right && !e.key.shift)
+            // move right
+            if(e.key.code == sf::Keyboard::Right)
+            {
+                moveView(sf::Vector2f(moveAmount, 0));
+            }
+        }else
         {
-            moveView(sf::Vector2f(10, 0));
+            if(e.key.code == sf::Keyboard::Up)
+            {
+                zoomX(-0.2);
+                zoomY(-0.2);
+            }
+            if(e.key.code == sf::Keyboard::Down)
+            {
+                zoomX(0.2);
+                zoomY(0.2);
+            }
         }
+        
     }
 }
 void disp::generateDebugData()
@@ -58,6 +79,26 @@ void disp::generateDebugData()
 void disp::moveView(sf::Vector2f direction)
 {
     currentView.setCenter( currentView.getCenter() + direction);
+}
+
+void disp::zoomX(float amount)
+{
+    currentView.setViewport(sf::FloatRect(
+        currentView.getViewport().left,
+        currentView.getViewport().top,
+        currentView.getViewport().width + amount,
+        currentView.getViewport().height
+    ));
+}
+
+void disp::zoomY(float amount)
+{
+    currentView.setViewport(sf::FloatRect(
+        currentView.getViewport().left,
+        currentView.getViewport().top,
+        currentView.getViewport().width,
+        currentView.getViewport().height + amount
+    ));
 }
 
 disp::~disp()

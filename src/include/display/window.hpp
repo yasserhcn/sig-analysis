@@ -51,7 +51,26 @@ private:
 
     sf::View currentView;
 
+    /**
+     * @brief move the view in a certain direction
+     * 
+     * @param direction the direction to move to
+     */
     void moveView(sf::Vector2f direction);
+
+    /**
+     * @brief zoom the view in the X axis
+     * 
+     * @param amount the amount of zoom (negative to zoom in, positive to zoom out)
+     */
+    void zoomX(float amount);
+
+    /**
+     * @brief zoom the view in the Y axis
+     * 
+     * @param amount the amount of zoom (negative to zoom in, positive to zoom out)
+     */
+    void zoomY(float amount);
 
     void generateDebugData();
     char debugData[1000];
