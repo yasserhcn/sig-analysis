@@ -34,8 +34,25 @@ private:
 
     std::unique_ptr<waveForm> x = std::make_unique<waveForm>();
 
+    enum windowEvents
+    {
+        mouseDrag,
+        zoomIn,
+        zoomOut,
+        zoomXIn,
+        zoomXOut,
+        zoomYIn,
+        zoomYOut,
+        moveLeft,
+        moveRight
+    };
+
+    bool mouseIsDown;
+
+    sf::View currentView;
+
+    void moveView(sf::Vector2f direction);
+
     void generateDebugData();
     char debugData[1000];
-
-    
 };
