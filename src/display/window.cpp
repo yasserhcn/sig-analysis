@@ -54,13 +54,19 @@ void disp::event(sf::Event e)
         {
             if(e.key.code == sf::Keyboard::Up)
             {
-                zoomX(-0.2);
                 zoomY(-0.2);
             }
             if(e.key.code == sf::Keyboard::Down)
             {
-                zoomX(0.2);
                 zoomY(0.2);
+            }
+            if(e.key.code == sf::Keyboard::Left)
+            {
+                zoomX(0.2);
+            }
+            if(e.key.code == sf::Keyboard::Right)
+            {
+                zoomX(-0.2);
             }
         }
         
