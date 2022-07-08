@@ -90,7 +90,7 @@ void disp::moveView(sf::Vector2f direction)
 void disp::zoomX(float amount)
 {
     currentView.setViewport(sf::FloatRect(
-        currentView.getViewport().left,
+        currentView.getViewport().left - (amount / 2),
         currentView.getViewport().top,
         currentView.getViewport().width + amount,
         currentView.getViewport().height
@@ -101,7 +101,7 @@ void disp::zoomY(float amount)
 {
     currentView.setViewport(sf::FloatRect(
         currentView.getViewport().left,
-        currentView.getViewport().top,
+        currentView.getViewport().top - (amount / 2),
         currentView.getViewport().width,
         currentView.getViewport().height + amount
     ));
