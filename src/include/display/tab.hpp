@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <../imgui/imgui.h>
 
 class tab
 {
@@ -20,6 +21,12 @@ public:
      * 
      */
     virtual void update() { }
+
+    /**
+     * @brief draw the ui for the current window
+     * 
+     */
+    virtual void drawUI() { }
 
     ~tab();
 private:
@@ -44,6 +51,12 @@ public:
      * 
      */
     void draw(std::shared_ptr<sf::RenderWindow> windowIn);
+
+    /**
+     * @brief draw the UI of the waveform window
+     * 
+     */
+    void drawUI();
 
     /**
      * @brief update the current waveform drawing

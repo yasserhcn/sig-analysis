@@ -12,6 +12,7 @@ void disp::update()
 {
     x->update();
     //window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
+    x->drawUI();
     x->draw(window);
     window->setView(currentView);
 }
