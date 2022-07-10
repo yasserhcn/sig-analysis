@@ -27,6 +27,13 @@ public:
      */
     void event(sf::Event e);
 
+    /**
+     * @brief update the move amount when a key is pressed
+     * 
+     * @param return pointer to move amount
+     */
+    float *getMoveAmountPtr();
+
     ~disp();
 private:
     //sf::RenderWindow *window;
@@ -71,6 +78,14 @@ private:
      * @param amount the amount of zoom (negative to zoom in, positive to zoom out)
      */
     void zoomY(float amount);
+
+    /**
+     * @brief draw the UI for movement
+     * 
+     */
+    void drawUI();
+
+    float moveAmount = 1;
 
     void generateDebugData();
     char debugData[1000];

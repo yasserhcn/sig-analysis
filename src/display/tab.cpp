@@ -51,15 +51,7 @@ void waveForm::update()
 
 void waveForm::drawUI()
 {
-    float n;
-    ImGui::Begin("waveform");
-
-
-    ImGui::Text("move amount");
-    ImGui::SliderFloat("##", &n, 0, 5);
-
-
-    ImGui::End();
+    
 }
 
 waveForm::~waveForm()

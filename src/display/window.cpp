@@ -12,7 +12,7 @@ void disp::update()
 {
     x->update();
     //window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
-    x->drawUI();
+    drawUI();
     x->draw(window);
     window->setView(currentView);
 }
@@ -23,33 +23,33 @@ void disp::event(sf::Event e)
     {
         if(!e.key.shift)
         {
-            int moveAmount = 10;
+            int multiplier = 1;
             if(e.key.control)
             {
-                moveAmount = 80;
+                multiplier = 5;
             }
             // move up
             if(e.key.code == sf::Keyboard::Up)
             {
-                moveView(sf::Vector2f(0, -moveAmount));
+                moveView(sf::Vector2f(0, -moveAmount * multiplier));
             }
 
             // move down
             if(e.key.code == sf::Keyboard::Down)
             {
-                moveView(sf::Vector2f(0, moveAmount));
+                moveView(sf::Vector2f(0, moveAmount * multiplier));
             }
 
             // move left
             if(e.key.code == sf::Keyboard::Left)
             {
-                moveView(sf::Vector2f(-moveAmount, 0));
+                moveView(sf::Vector2f(-moveAmount * multiplier, 0));
             }
 
             // move right
             if(e.key.code == sf::Keyboard::Right)
             {
-                moveView(sf::Vector2f(moveAmount, 0));
+                moveView(sf::Vector2f(moveAmount * multiplier, 0));
             }
         }else
         {
@@ -106,6 +106,22 @@ void disp::zoomY(float amount)
         currentView.getViewport().width,
         currentView.getViewport().height + amount
     ));
+}
+
+void disp::drawUI()
+{
+    ImGui::Begin("hello world");
+
+    ImGui::Separator();
+    ImGui::Text("move amount");
+    ImGui::SliderFloat("##", getMoveAmountPtr(), 1, 100);
+
+    ImGui::End();
+}
+
+float *disp::getMoveAmountPtr()
+{
+    return &moveAmount;
 }
 
 disp::~disp()

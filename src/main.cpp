@@ -7,7 +7,8 @@
 int main()
 {
     
-    std::shared_ptr<sf::RenderWindow> window = std::make_shared<sf::RenderWindow>(sf::VideoMode(700, 500), "SFML works!");
+    std::shared_ptr<sf::RenderWindow> window = std::make_shared<sf::RenderWindow>
+                                               (sf::VideoMode(700, 500), "SFML works!");
 
     ImGui::SFML::Init(*window);
 
