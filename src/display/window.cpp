@@ -55,11 +55,11 @@ void disp::event(sf::Event e)
         {
             if(e.key.code == sf::Keyboard::Up)
             {
-                zoomY(-0.2);
+                zoomY(0.2);
             }
             if(e.key.code == sf::Keyboard::Down)
             {
-                zoomY(0.2);
+                zoomY(-0.2);
             }
             if(e.key.code == sf::Keyboard::Left)
             {
@@ -90,6 +90,14 @@ void disp::moveView(sf::Vector2f direction)
 
 void disp::zoomX(float amount)
 {
+    if(amount > 1 || amount < -1){
+        return;
+    }
+
+    if(currentView.getViewport().width + amount < 0){
+        return;
+    }
+
     currentView.setViewport(sf::FloatRect(
         currentView.getViewport().left - (amount / 2),
         currentView.getViewport().top,
@@ -100,6 +108,14 @@ void disp::zoomX(float amount)
 
 void disp::zoomY(float amount)
 {
+    if(amount > 1 || amount < -1){
+        return;
+    }
+
+    if(currentView.getViewport().height + amount < 0){
+        return;
+    }
+
     currentView.setViewport(sf::FloatRect(
         currentView.getViewport().left,
         currentView.getViewport().top - (amount / 2),
