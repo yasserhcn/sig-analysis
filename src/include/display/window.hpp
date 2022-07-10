@@ -34,6 +34,13 @@ public:
      */
     float *getMoveAmountPtr();
 
+    /**
+     * @brief add a text to the debug window
+     * 
+     * @param text the debug text
+     */
+    void addDebugText(std::string text);
+
     ~disp();
 private:
     //sf::RenderWindow *window;
@@ -57,6 +64,13 @@ private:
     bool mouseIsDown;
 
     sf::View currentView;
+
+    float moveAmount = 1;
+
+    void generateDebugData();
+    char debugData[1000];
+
+    std::vector<std::string> debugStrings;
 
     /**
      * @brief move the view in a certain direction
@@ -84,9 +98,4 @@ private:
      * 
      */
     void drawUI();
-
-    float moveAmount = 1;
-
-    void generateDebugData();
-    char debugData[1000];
 };

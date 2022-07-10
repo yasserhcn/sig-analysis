@@ -73,6 +73,12 @@ void disp::event(sf::Event e)
         
     }
 }
+
+void disp::addDebugText(std::string text)
+{
+    debugStrings.push_back(text);
+}
+
 void disp::generateDebugData()
 {
     for (int i = 0; i < 1000; i++)
@@ -128,9 +134,23 @@ void disp::drawUI()
 {
     ImGui::Begin("hello world");
 
+    // move settings 
     ImGui::Separator();
     ImGui::Text("move amount");
     ImGui::SliderFloat("##", getMoveAmountPtr(), 1, 100);
+
+    // debug stuff
+    ImGui::Separator();
+    if(ImGui::TreeNode("debug data"))
+    {
+        ImGui::BeginChild("debug text");
+        for(int i = 0; i < debugStrings.size(); i++)
+        {
+            ImGui::Text(debugStrings[i].c_str());
+        }
+        ImGui::EndChild();
+        ImGui::TreePop();
+    }
 
     ImGui::End();
 }
