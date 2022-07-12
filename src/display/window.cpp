@@ -139,6 +139,20 @@ void disp::drawUI()
     ImGui::Text("move amount");
     ImGui::SliderFloat("##", getMoveAmountPtr(), 1, 100);
 
+    // zoom settings
+    ImGui::Separator();
+    ImGui::Text("zoom");
+    float windowWidth = currentView.getViewport().width;
+    float windowHeight = currentView.getViewport().height;
+    ImGui::SliderFloat("window width", &windowWidth, 0.08, 2);
+    ImGui::SliderFloat("window height", &windowHeight, 0.08, 2);
+    currentView.setViewport(sf::FloatRect(
+        currentView.getViewport().left,
+        currentView.getViewport().top,
+        windowWidth,
+        windowHeight
+    ));
+
     // debug stuff
     ImGui::Separator();
     if(ImGui::TreeNode("debug data"))
