@@ -212,7 +212,7 @@ bool Wav::checkData()
     return 0;
 }
 
-int Wav::getDataChunkSize()
+uint32_t Wav::getDataChunkSize()
 {
     uint32_t size;
     size = *((uint32_t*) (buffer.get() + OFFSET_TO_DATA_CHUNK + 4) );
