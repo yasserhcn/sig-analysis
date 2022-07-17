@@ -78,7 +78,7 @@ bool Wav::checkRiff()
     return 0;
 }
 
-int Wav::getHeaderSize()
+uint32_t Wav::getHeaderSize()
 {
     u_int32_t size;
     size = *((u_int32_t*) (buffer.get() + OFFSET_TO_SIZE) );
@@ -127,7 +127,7 @@ bool Wav::checkFmtId()
     return 0;
 }
 
-int Wav::getFmtSize()
+uint32_t Wav::getFmtSize()
 {
     uint32_t size;
     size = *((uint32_t*) (buffer.get() + OFFSET_TO_FMT + 4) );
@@ -135,7 +135,7 @@ int Wav::getFmtSize()
     return size;
 }
 
-int Wav::getFmtFormat()
+u_int16_t Wav::getFmtFormat()
 {
     u_int16_t size;
     size = *((u_int16_t*) (buffer.get() + OFFSET_TO_FMT + 8) );
@@ -144,7 +144,7 @@ int Wav::getFmtFormat()
     return size;
 }
 
-int Wav::getFmtNumChannels()
+u_int16_t Wav::getFmtNumChannels()
 {
     u_int16_t size;
     size = *((u_int16_t*) (buffer.get() + OFFSET_TO_FMT + 10) );
@@ -161,7 +161,7 @@ u_int32_t Wav::getFmtSampleRate()
     return size;
 }
 
-int Wav::getFmtByteRate()
+uint32_t Wav::getFmtByteRate()
 {
     uint32_t size;
     size = *((uint32_t*) (buffer.get() + OFFSET_TO_FMT + 16) );
@@ -169,7 +169,7 @@ int Wav::getFmtByteRate()
     return size;
 }
 
-int Wav::getFmtBlockAlign()
+uint16_t Wav::getFmtBlockAlign()
 {
     uint16_t size;
     size = *((uint16_t*) (buffer.get() + OFFSET_TO_FMT + 20) );
@@ -178,7 +178,7 @@ int Wav::getFmtBlockAlign()
     return size;
 }
 
-int Wav::getFmtBitsPerSample()
+uint16_t Wav::getFmtBitsPerSample()
 {
     uint16_t size;
     size = *((uint16_t*) (buffer.get() + OFFSET_TO_FMT + 22) );

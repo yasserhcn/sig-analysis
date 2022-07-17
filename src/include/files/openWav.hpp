@@ -108,7 +108,7 @@ private:
      * 
      * @return int size
      */
-    int getHeaderSize();
+    uint32_t getHeaderSize();
 
     /**
      * @brief check if the file is wave
@@ -129,21 +129,21 @@ private:
      * 
      * @return int size
      */
-    int getFmtSize();
+    uint32_t getFmtSize();
 
     /**
      * @brief get thee audio format
      * 
      * @return int with format value
      */
-    int getFmtFormat();
+    u_int16_t getFmtFormat();
 
     /**
      * @brief get the number of channels in the file
      * 
      * @return int with the number of channels
      */
-    int getFmtNumChannels();
+    u_int16_t getFmtNumChannels();
 
     /**
      * @brief get the sample rate
@@ -157,21 +157,21 @@ private:
      * 
      * @return int with the bytee rate
      */
-    int getFmtByteRate();
+    uint32_t getFmtByteRate();
 
     /**
      * @brief get thte block align value
      * 
      * @return int with the value of block align
      */
-    int getFmtBlockAlign();
+    u_int16_t getFmtBlockAlign();
 
     /**
      * @brief get the bits per sample field
      * 
      * @brief int with the amount of bits per sample
      */
-    int getFmtBitsPerSample();
+    uint16_t getFmtBitsPerSample();
 
     /**
      * @brief validate the data header
@@ -185,6 +185,6 @@ private:
      * 
      * @return int with the size of the data section
      */
-    int getDataChunkSize();
+    uint32_t getDataChunkSize();
 };
 
