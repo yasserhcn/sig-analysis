@@ -186,6 +186,34 @@ u_int32_t Wav::debugVal()
     return fmtChunk.sampleRate;
 }
 
+bool Wav::checkData()
+{
+    char value[4];
+    value[0] = buffer.get()[OFFSET_TO_DATA_CHUNK + 0];
+    value[1] = buffer.get()[OFFSET_TO_DATA_CHUNK + 1];
+    value[2] = buffer.get()[OFFSET_TO_DATA_CHUNK + 2];
+    value[3] = buffer.get()[OFFSET_TO_DATA_CHUNK + 3];
+
+    if( 
+        value[0] == dataChunk.chunkId[0] && 
+        value[1] == dataChunk.chunkId[1] &&
+        value[2] == dataChunk.chunkId[2] &&
+        value[3] == dataChunk.chunkId[3]
+      )
+    {
+        return 1;
+    }
+    return 0;
+}
+
+int Wav::getDataChunkSize()
+{
+    uint32_t size;
+    size = *((uint32_t*) (buffer.get() + OFFSET_TO_DATA_CHUNK + 4) );
+    dataChunk.chunkSize = size;
+    return size;
+}
+
 Wav::~Wav()
 {
 }

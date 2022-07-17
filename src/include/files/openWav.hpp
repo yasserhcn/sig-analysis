@@ -61,6 +61,12 @@ private:
         u_int8_t blockAlign;
         u_int8_t bitsPerSample;
     }fmtChunk;
+
+    struct dataChunkData
+    {
+        const char chunkId[4] = { 'd', 'a', 't', 'a'};
+        uint32_t chunkSize;
+    }dataChunk;
     
     /**
      * @brief parse the header of the file
@@ -157,5 +163,19 @@ private:
      * @brief int with the amount of bits per sample
      */
     int getFmtBitsPerSample();
+
+    /**
+     * @brief validate the data header
+     * 
+     * @return true if the data header is valid
+     */
+    bool checkData();
+    
+    /**
+     * @brief Get the size of the data section
+     * 
+     * @return int with the size of the data section
+     */
+    int getDataChunkSize();
 };
 
