@@ -31,6 +31,13 @@ public:
     bool checkValid();
 
     /**
+     * @brief return the size of the file
+     * 
+     * @return uint64_t 
+     */
+    uint64_t getFileSize();
+
+    /**
      * @brief used for debugging
      * 
      * @return int value
@@ -42,6 +49,8 @@ public:
 private:
     std::shared_ptr<uint8_t> data;
     std::shared_ptr<uint8_t> buffer;
+
+    uint64_t bufferSize;
 
     struct riffHeaderData
     {

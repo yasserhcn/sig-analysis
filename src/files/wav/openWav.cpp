@@ -7,7 +7,8 @@ Wav::Wav(std::string path, bool autoParse)
 
     // get the file size    
     file.seekg(0, file.end);
-    int length = file.tellg();
+    uint64_t length = file.tellg();
+    bufferSize = length;
     file.seekg(0, file.beg);
 
     // copy data to a buffer
@@ -30,6 +31,11 @@ bool Wav::checkValid()
     CHECK_BOOL(isValid, checkRiff());
 
     return isValid;
+}
+
+uint64_t Wav::getFileSize()
+{
+    return bufferSize;
 }
 
 void Wav::parseHeader()
