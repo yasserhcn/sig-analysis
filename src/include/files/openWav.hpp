@@ -50,7 +50,7 @@ public:
      * 
      * @return int 
      */
-    int getAmountOfSamples();
+    int64_t getAmountOfSamples();
 
     /**
      * @brief return the sample value
@@ -66,13 +66,13 @@ public:
      * 
      * @return int value
      */
-    u_int32_t debugVal();
+    int32_t debugVal();
     char debugVar[4];
 
     ~Wav();
 private:
     // vector of channels, each channel has a pointer to an array with the data
-    std::vector<std::shared_ptr<u_int64_t>> channels;
+    std::vector<std::shared_ptr<int64_t>> channels;
     // amount of data points
     uint64_t dataPointsSize;
 
@@ -92,12 +92,12 @@ private:
     {
         const char chunkId[4] = {'f', 'm', 't', ' '};
         uint32_t chunkSize = 0;
-        u_int8_t audioFormat;
-        u_int8_t numChannels;
-        u_int32_t sampleRate;
+        int8_t audioFormat;
+        int8_t numChannels;
+        int32_t sampleRate;
         uint32_t byteRate;
-        u_int8_t blockAlign;
-        u_int8_t bitsPerSample;
+        int8_t blockAlign;
+        int8_t bitsPerSample;
     }fmtChunk;
 
     struct dataChunkData
@@ -165,21 +165,21 @@ private:
      * 
      * @return int with format value
      */
-    u_int16_t getFmtFormat();
+    int16_t getFmtFormat();
 
     /**
      * @brief get the number of channels in the file
      * 
      * @return int with the number of channels
      */
-    u_int16_t getFmtNumChannels();
+    int16_t getFmtNumChannels();
 
     /**
      * @brief get the sample rate
      * 
      * @return int with the sample rate
      */
-    u_int32_t getFmtSampleRate();
+    int32_t getFmtSampleRate();
 
     /**
      * @brief get the byte rate
@@ -193,7 +193,7 @@ private:
      * 
      * @return int with the value of block align
      */
-    u_int16_t getFmtBlockAlign();
+    int16_t getFmtBlockAlign();
 
     /**
      * @brief get the bits per sample field

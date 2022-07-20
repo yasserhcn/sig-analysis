@@ -31,7 +31,7 @@ uint8_t Wav::getAmountOfChannels()
     return fmtChunk.numChannels;
 }
 
-int Wav::getAmountOfSamples()
+int64_t Wav::getAmountOfSamples()
 {
     return (dataChunk.chunkSize / fmtChunk.blockAlign);
 }
@@ -113,8 +113,8 @@ bool Wav::checkRiff()
 
 uint32_t Wav::getHeaderSize()
 {
-    u_int32_t size;
-    size = *((u_int32_t*) (buffer.get() + OFFSET_TO_SIZE) );
+    int32_t size;
+    size = *((int32_t*) (buffer.get() + OFFSET_TO_SIZE) );
     riffChunk.chunkDataSize = size;
     return size;
 }
@@ -168,28 +168,28 @@ uint32_t Wav::getFmtSize()
     return size;
 }
 
-u_int16_t Wav::getFmtFormat()
+int16_t Wav::getFmtFormat()
 {
-    u_int16_t size;
-    size = *((u_int16_t*) (buffer.get() + OFFSET_TO_FMT + 8) );
+    int16_t size;
+    size = *((int16_t*) (buffer.get() + OFFSET_TO_FMT + 8) );
     fmtChunk.audioFormat = size;
     debugVar[0] = size;
     return size;
 }
 
-u_int16_t Wav::getFmtNumChannels()
+int16_t Wav::getFmtNumChannels()
 {
-    u_int16_t size;
-    size = *((u_int16_t*) (buffer.get() + OFFSET_TO_FMT + 10) );
+    int16_t size;
+    size = *((int16_t*) (buffer.get() + OFFSET_TO_FMT + 10) );
     fmtChunk.audioFormat = size;
     debugVar[1] = size;
     return size;
 }
 
-u_int32_t Wav::getFmtSampleRate()
+int32_t Wav::getFmtSampleRate()
 {
-    u_int32_t size;
-    size = *((u_int32_t*) (buffer.get() + OFFSET_TO_FMT + 12) );
+    int32_t size;
+    size = *((int32_t*) (buffer.get() + OFFSET_TO_FMT + 12) );
     fmtChunk.sampleRate = size;
     return size;
 }
@@ -202,7 +202,7 @@ uint32_t Wav::getFmtByteRate()
     return size;
 }
 
-uint16_t Wav::getFmtBlockAlign()
+int16_t Wav::getFmtBlockAlign()
 {
     uint16_t size;
     size = *((uint16_t*) (buffer.get() + OFFSET_TO_FMT + 20) );
@@ -221,7 +221,7 @@ uint16_t Wav::getFmtBitsPerSample()
     return size;
 }
 
-u_int32_t Wav::debugVal()
+int32_t Wav::debugVal()
 {
     return dataChunk.chunkSize;
 }
@@ -266,7 +266,7 @@ void Wav::fetchData()
     // alocate memory for the data
     for (uint8_t i = 0; i < fmtChunk.numChannels; i++)
     {
-        std::shared_ptr<u_int64_t> data(new u_int64_t[numberSamples], std::default_delete<u_int64_t[]>());
+        std::shared_ptr<int64_t> data(new int64_t[numberSamples], std::default_delete<int64_t[]>());
         channels.push_back(data);
     }
     
@@ -278,19 +278,19 @@ void Wav::fetchData()
 
             if(fmtChunk.bitsPerSample / 8 == 1){
                 
-                channels[currentChannel].get()[i] = *(u_int8_t*)(buffer.get() + dataPos);
+                channels[currentChannel].get()[i] = *(int8_t*)(buffer.get() + dataPos);
             }
             else if(fmtChunk.bitsPerSample / 8 == 2){
                 
-                channels[currentChannel].get()[i] = *(u_int16_t*)(buffer.get() + dataPos);
+                channels[currentChannel].get()[i] = *(int16_t*)(buffer.get() + dataPos);
             }
             else if(fmtChunk.bitsPerSample / 8 == 4){
 
-                channels[currentChannel].get()[i] = *(u_int32_t*)(buffer.get() + dataPos);
+                channels[currentChannel].get()[i] = *(int32_t*)(buffer.get() + dataPos);
             }
             else if(fmtChunk.bitsPerSample / 8 == 8){
                 
-                channels[currentChannel].get()[i] = *(u_int64_t*)(buffer.get() + dataPos);
+                channels[currentChannel].get()[i] = *(int64_t*)(buffer.get() + dataPos);
             }
         }
         
