@@ -15,7 +15,7 @@ waveForm::waveForm()
 
 }
 
-void waveForm::addValue(u_int64_t val)
+void waveForm::addValue(int64_t val)
 {
     dataPoints.push_back(val);
 }
@@ -32,19 +32,20 @@ void waveForm::update()
         // using linestrip
         for (int i = 0; i < graph.getVertexCount(); i++)
         {
-            graph[i].position = sf::Vector2f(i * 5, -dataPoints[i] + 200);
+            graph[i].position = sf::Vector2f(i * 0.05, -dataPoints[i] + 200);
         }
 
         for (int i = graph.getVertexCount(); i < dataPoints.size(); i++)
         {
-            graph.append(sf::Vertex(sf::Vector2f(i * 5, -dataPoints[i] + 200)));
+            graph.append(sf::Vertex(sf::Vector2f(i * 0.05, -dataPoints[i] + 200)));
+            graph[i].color = sf::Color::Green;
         }
         
     }else
     {
         for (int i = 0; i < dataPoints.size(); i++)
         {
-            graph[i].position = sf::Vector2f(i * 5, -dataPoints[i] + 200);
+            graph[i].position = sf::Vector2f(i * 0.05, -dataPoints[i] + 200);
         }
     }
 }

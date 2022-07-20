@@ -44,7 +44,7 @@ public:
      * 
      * @param val value to add
      */
-    void addValue(u_int64_t val);
+    void addValue(int64_t val);
 
     /**
      * @brief draw the waveform
@@ -66,7 +66,7 @@ public:
 
     ~waveForm();
 private:
-    std::vector<u_int64_t> dataPoints;
+    std::vector<int64_t> dataPoints;
 
     sf::VertexArray graph;
 

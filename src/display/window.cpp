@@ -10,10 +10,10 @@ disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 
 void disp::update()
 {
-    x->update();
+    waveFormWindow->update();
     //window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
     drawUI();
-    x->draw(window);
+    waveFormWindow->draw(window);
     window->setView(currentView);
 }
 
@@ -74,6 +74,24 @@ void disp::event(sf::Event e)
     }
 }
 
+void disp::openWavFile(std::string path)
+{
+    Wav file(path);
+    if( !file.checkValid()){
+        return;
+    }
+
+    uint8_t channels = file.getAmountOfChannels();
+    uint32_t samples = file.getAmountOfSamples();
+    addDebugText(std::to_string(samples));
+    addDebugText(std::to_string(channels));
+    for (uint32_t i = 0; i < samples; i++)
+    {
+        waveFormWindow->addValue(file.getSample(i)/100);
+    }
+    
+}
+
 void disp::addDebugText(std::string text)
 {
     debugStrings.push_back(text);
@@ -81,10 +99,10 @@ void disp::addDebugText(std::string text)
 
 void disp::generateDebugData()
 {
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         debugData[i] = rand()%255;
-        x->addValue(debugData[i]);
+        waveFormWindow->addValue(debugData[i]);
     }
     
 }
@@ -144,7 +162,7 @@ void disp::drawUI()
     ImGui::Text("zoom");
     float windowWidth = currentView.getViewport().width;
     float windowHeight = currentView.getViewport().height;
-    ImGui::SliderFloat("window width", &windowWidth, 0.08, 2);
+    ImGui::SliderFloat("window width", &windowWidth, 0.08, 25);
     ImGui::SliderFloat("window height", &windowHeight, 0.08, 2);
     currentView.setViewport(sf::FloatRect(
         currentView.getViewport().left,

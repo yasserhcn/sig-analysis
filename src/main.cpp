@@ -14,6 +14,7 @@ int main()
 
     Wav x("test.wav");
     disp y(window);
+    y.openWavFile("test.wav");
 
     sf::Clock delta;
     while (window->isOpen())
