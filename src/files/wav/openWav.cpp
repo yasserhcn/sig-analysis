@@ -22,6 +22,7 @@ Wav::Wav(std::string path, bool autoParse)
     {
         parseHeader();
         parseFmt();
+        parseData();
     }
 }
 
@@ -29,6 +30,10 @@ bool Wav::checkValid()
 {
     bool isValid = true;
     CHECK_BOOL(isValid, checkRiff());
+    CHECK_BOOL(isValid, checkFmtId());
+    CHECK_BOOL(isValid, checkData());
+
+    //TODO throw exception if value is false
 
     return isValid;
 }
@@ -55,6 +60,13 @@ void Wav::parseFmt()
     getFmtByteRate();
     getFmtBlockAlign();
     getFmtBitsPerSample();
+}
+
+void Wav::parseData()
+{
+    bool checkData();
+    getDataChunkSize();
+    fetchData();
 }
 
 bool Wav::checkRiff()
@@ -180,6 +192,7 @@ uint16_t Wav::getFmtBlockAlign()
 
 uint16_t Wav::getFmtBitsPerSample()
 {
+    //TODO: ensure that it's a power of 2
     uint16_t size;
     size = *((uint16_t*) (buffer.get() + OFFSET_TO_FMT + 22) );
     fmtChunk.bitsPerSample = size;
@@ -189,7 +202,7 @@ uint16_t Wav::getFmtBitsPerSample()
 
 u_int32_t Wav::debugVal()
 {
-    return fmtChunk.sampleRate;
+    return dataChunk.chunkSize;
 }
 
 bool Wav::checkData()
@@ -218,6 +231,50 @@ uint32_t Wav::getDataChunkSize()
     size = *((uint32_t*) (buffer.get() + OFFSET_TO_DATA_CHUNK + 4) );
     dataChunk.chunkSize = size;
     return size;
+}
+
+void Wav::fetchData()
+{
+    uint32_t currentOffset = OFFSET_TO_DATA;
+
+    // the number of samples in the file
+    //* NOTE: one sample includes the data in all the audio channels
+    //* in the case for stereo one sample has both the left and right values 
+    uint32_t numberSamples = (dataChunk.chunkSize / fmtChunk.blockAlign);
+
+    // alocate memory for the data
+    for (uint8_t i = 0; i < fmtChunk.numChannels; i++)
+    {
+        std::shared_ptr<u_int64_t> data(new u_int64_t[numberSamples], std::default_delete<u_int64_t[]>());
+        channels.push_back(data);
+    }
+    
+    for (uint8_t currentChannel = 0; currentChannel < fmtChunk.numChannels; currentChannel++)
+    {
+        for (uint32_t i = 0; i < numberSamples; i++)
+        {
+            uint64_t dataPos = OFFSET_TO_DATA + ((i * fmtChunk.blockAlign) + currentChannel);
+
+            if(fmtChunk.bitsPerSample / 8 == 1){
+                
+                channels[currentChannel].get()[i] = *(u_int8_t*)(buffer.get() + dataPos);
+            }
+            else if(fmtChunk.bitsPerSample / 8 == 2){
+                
+                channels[currentChannel].get()[i] = *(u_int16_t*)(buffer.get() + dataPos);
+            }
+            else if(fmtChunk.bitsPerSample / 8 == 4){
+                
+                channels[currentChannel].get()[i] = *(u_int32_t*)(buffer.get() + dataPos);
+            }
+            else if(fmtChunk.bitsPerSample / 8 == 8){
+                
+                channels[currentChannel].get()[i] = *(u_int64_t*)(buffer.get() + dataPos);
+            }
+        }
+        
+    }
+    
 }
 
 Wav::~Wav()

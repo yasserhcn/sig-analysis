@@ -4,6 +4,7 @@
 #include <fstream>
 #include <memory>
 #include <algorithm>
+#include <vector>
 
 #define CHECK_BOOL(x, y) (x = x && y)
 
@@ -47,9 +48,14 @@ public:
 
     ~Wav();
 private:
-    std::shared_ptr<uint8_t> data;
-    std::shared_ptr<uint8_t> buffer;
+    // vector of channels, each channel has a pointer to an array with the data
+    std::vector<std::shared_ptr<u_int64_t>> channels;
+    // amount of data points
+    uint64_t dataPointsSize;
 
+    // pointer to the file buffer
+    std::shared_ptr<uint8_t> buffer;
+    // size of the file buffer
     uint64_t bufferSize;
 
     struct riffHeaderData
@@ -186,5 +192,8 @@ private:
      * @return int with the size of the data section
      */
     uint32_t getDataChunkSize();
+
+    // get the data from the data chunk
+    void fetchData();
 };
 
