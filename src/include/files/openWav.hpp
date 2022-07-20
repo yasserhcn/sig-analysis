@@ -39,6 +39,29 @@ public:
     uint64_t getFileSize();
 
     /**
+     * @brief return the amount of channels in the file
+     * 
+     * @return uint8_t 
+     */
+    uint8_t getAmountOfChannels();
+
+    /**
+     * @brief return the amount of samples
+     * 
+     * @return int 
+     */
+    int getAmountOfSamples();
+
+    /**
+     * @brief return the sample value
+     * 
+     * @param position the index of the sample
+     * @param channel the channel the sample is in (must not be more than the amount of channels in the file)
+     * @return uint64_t 
+     */
+    uint64_t getSample(uint32_t position, uint8_t channel = 0);
+
+    /**
      * @brief used for debugging
      * 
      * @return int value

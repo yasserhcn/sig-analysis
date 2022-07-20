@@ -26,6 +26,27 @@ Wav::Wav(std::string path, bool autoParse)
     }
 }
 
+uint8_t Wav::getAmountOfChannels()
+{
+    return fmtChunk.numChannels;
+}
+
+int Wav::getAmountOfSamples()
+{
+    return (dataChunk.chunkSize / fmtChunk.blockAlign);
+}
+
+uint64_t Wav::getSample(uint32_t position, uint8_t channel)
+{
+    if(channel > fmtChunk.numChannels){
+        return -1;
+    }
+    if(position > getAmountOfSamples()){
+        return -1;
+    }
+    return channels[0].get()[position];
+}
+
 bool Wav::checkValid()
 {
     bool isValid = true;
@@ -264,7 +285,7 @@ void Wav::fetchData()
                 channels[currentChannel].get()[i] = *(u_int16_t*)(buffer.get() + dataPos);
             }
             else if(fmtChunk.bitsPerSample / 8 == 4){
-                
+
                 channels[currentChannel].get()[i] = *(u_int32_t*)(buffer.get() + dataPos);
             }
             else if(fmtChunk.bitsPerSample / 8 == 8){
