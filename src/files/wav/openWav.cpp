@@ -12,7 +12,7 @@ Wav::Wav(std::string path, bool autoParse)
     file.seekg(0, file.beg);
 
     // copy data to a buffer
-    std::shared_ptr<uint8_t> bufferData(new uint8_t[length], std::default_delete<uint8_t[]>());
+    std::shared_ptr<int8_t> bufferData(new int8_t[length], std::default_delete<int8_t[]>());
     //char * buffer = new char [length];
     file.read( (char *)bufferData.get(), length );
 

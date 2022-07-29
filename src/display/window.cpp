@@ -87,7 +87,7 @@ void disp::openWavFile(std::string path)
     addDebugText(std::to_string(channels));
     for (uint32_t i = 0; i < samples; i++)
     {
-        waveFormWindow->addValue(file.getSample(i)/100);
+        waveFormWindow->addValue(file.getSample(i));
     }
     
 }

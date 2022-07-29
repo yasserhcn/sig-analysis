@@ -32,12 +32,12 @@ void waveForm::update()
         // using linestrip
         for (int i = 0; i < graph.getVertexCount(); i++)
         {
-            graph[i].position = sf::Vector2f(i * 0.05, -dataPoints[i] + 200);
+            graph[i].position = sf::Vector2f(i * 0.08, -(dataPoints[i] * 0.01) + 500);
         }
 
         for (int i = graph.getVertexCount(); i < dataPoints.size(); i++)
         {
-            graph.append(sf::Vertex(sf::Vector2f(i * 0.05, -dataPoints[i] + 200)));
+            graph.append(sf::Vertex(sf::Vector2f(i * 0.08, -(dataPoints[i] * 0.01) + 500)));
             graph[i].color = sf::Color::Green;
         }
         
@@ -45,7 +45,7 @@ void waveForm::update()
     {
         for (int i = 0; i < dataPoints.size(); i++)
         {
-            graph[i].position = sf::Vector2f(i * 0.05, -dataPoints[i] + 200);
+            graph[i].position = sf::Vector2f(i * 0.08, -(dataPoints[i] * 0.01) + 500);
         }
     }
 }

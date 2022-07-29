@@ -77,7 +77,7 @@ private:
     uint64_t dataPointsSize;
 
     // pointer to the file buffer
-    std::shared_ptr<uint8_t> buffer;
+    std::shared_ptr<int8_t> buffer;
     // size of the file buffer
     uint64_t bufferSize;
 
