@@ -28,9 +28,38 @@ public:
      */
     virtual void drawUI() { }
 
+    /**
+     * @brief increase/decrease the zoom on the x axis
+     * 
+     * @param value amount between -1 and 1
+     */
+    void zoomX(float value);
+
+    /**
+     * @brief increase/decrease the zoom on the y axis
+     * 
+     * @param value amount between -1 and 1
+     */
+    void zoomY(float value);
+
+    /**
+     * @brief Get the amount of zoom in the x axis
+     * 
+     * @return float 
+     */
+    float getZoomX();
+
+    /**
+     * @brief Get the amount of zoom in the y axis
+     * 
+     * @return float 
+     */
+    float getZoomY();
+
     ~tab();
 private:
-
+    float zoomXAmount = 0.08;
+    float zoomYAmount = 0.01;
 };
 
 
@@ -63,6 +92,13 @@ public:
      * 
      */
     void update();
+
+    /**
+     * @brief Get the Amount Data Points
+     * 
+     * @return int64_t 
+     */
+    int64_t getAmountDataPoints();
 
     ~waveForm();
 private:

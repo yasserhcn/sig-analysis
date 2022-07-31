@@ -55,11 +55,11 @@ void disp::event(sf::Event e)
         {
             if(e.key.code == sf::Keyboard::Up)
             {
-                zoomY(0.2);
+                zoomY(0.05);
             }
             if(e.key.code == sf::Keyboard::Down)
             {
-                zoomY(-0.2);
+                zoomY(-0.05);
             }
             if(e.key.code == sf::Keyboard::Left)
             {
@@ -118,16 +118,13 @@ void disp::zoomX(float amount)
         return;
     }
 
-    if(currentView.getViewport().width + amount < 0){
-        return;
+    if(currentTab == waveformTab)
+    {
+        float currentPosX = currentView.getCenter().x / waveFormWindow->getZoomX();
+        waveFormWindow->zoomX(amount);
+        currentPosX *= waveFormWindow->getZoomX();
+        currentView.setCenter(sf::Vector2f(currentPosX, currentView.getCenter().y));
     }
-
-    currentView.setViewport(sf::FloatRect(
-        currentView.getViewport().left - (amount / 2),
-        currentView.getViewport().top,
-        currentView.getViewport().width + amount,
-        currentView.getViewport().height
-    ));
 }
 
 void disp::zoomY(float amount)
@@ -136,16 +133,10 @@ void disp::zoomY(float amount)
         return;
     }
 
-    if(currentView.getViewport().height + amount < 0){
-        return;
+    if(currentTab == waveformTab)
+    {
+        waveFormWindow->zoomY(amount);
     }
-
-    currentView.setViewport(sf::FloatRect(
-        currentView.getViewport().left,
-        currentView.getViewport().top - (amount / 2),
-        currentView.getViewport().width,
-        currentView.getViewport().height + amount
-    ));
 }
 
 void disp::drawUI()
@@ -160,16 +151,12 @@ void disp::drawUI()
     // zoom settings
     ImGui::Separator();
     ImGui::Text("zoom");
-    float windowWidth = currentView.getViewport().width;
-    float windowHeight = currentView.getViewport().height;
-    ImGui::SliderFloat("window width", &windowWidth, 0.08, 25);
-    ImGui::SliderFloat("window height", &windowHeight, 0.08, 2);
-    currentView.setViewport(sf::FloatRect(
-        currentView.getViewport().left,
-        currentView.getViewport().top,
-        windowWidth,
-        windowHeight
-    ));
+    float windowWidth = getZoomX();
+    float windowHeight = getZoomY();
+    ImGui::SliderFloat("window width", &windowWidth, 0.09, 1);
+    ImGui::SliderFloat("window height", &windowHeight, 0.001, 0.05);
+    setZoomX(windowWidth);
+    setZoomY(windowHeight);
 
     // debug stuff
     ImGui::Separator();
@@ -190,6 +177,40 @@ void disp::drawUI()
 float *disp::getMoveAmountPtr()
 {
     return &moveAmount;
+}
+
+float disp::getZoomX()
+{
+    if(currentTab == waveformTab){
+        return waveFormWindow->getZoomX();
+    }
+    return -1;
+}
+
+float disp::getZoomY()
+{
+    if(currentTab == waveformTab){
+        return waveFormWindow->getZoomY();
+    }
+    return -1;
+}
+
+void disp::setZoomX(float value)
+{
+    float difference = 0;
+    if(currentTab == waveformTab){
+        difference = value - waveFormWindow->getZoomX();
+    }
+    zoomX(difference);
+}
+
+void disp::setZoomY(float value)
+{
+    float difference = 0;
+    if(currentTab == waveformTab){
+        difference = value - waveFormWindow->getZoomY();
+    }
+    zoomY(difference);
 }
 
 disp::~disp()
