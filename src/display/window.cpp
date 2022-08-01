@@ -83,13 +83,13 @@ void disp::openWavFile(std::string path)
 
     uint8_t channels = file.getAmountOfChannels();
     uint32_t samples = file.getAmountOfSamples();
-    addDebugText(std::to_string(samples));
-    addDebugText(std::to_string(channels));
-    for (uint32_t i = 0; i < samples; i++)
+    if(currentTab == waveformTab)
     {
-        waveFormWindow->addValue(file.getSample(i));
+        for (uint32_t i = 0; i < samples; i++)
+        {
+            waveFormWindow->addValue(file.getSample(i));
+        }
     }
-    
 }
 
 void disp::addDebugText(std::string text)
@@ -142,6 +142,13 @@ void disp::zoomY(float amount)
 void disp::drawUI()
 {
     ImGui::Begin("hello world");
+
+    ImGui::Text("file");
+    ImGui::InputText("filename", &fileName);
+    ImGui::Text(fileName.c_str());
+    if(ImGui::Button("open file")){
+        openWavFile(fileName);
+    }
 
     // move settings 
     ImGui::Separator();

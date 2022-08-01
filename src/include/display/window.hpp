@@ -4,6 +4,7 @@
 #include <display/tab.hpp>
 #include <memory>
 #include <files/openWav.hpp>
+#include <imgui/misc/cpp/imgui_stdlib.h>
 
 class disp
 {
@@ -72,6 +73,8 @@ private:
     {
         waveformTab
     };
+    
+    std::string fileName;
 
     int currentTab = waveformTab;
 

@@ -4,6 +4,10 @@
 Wav::Wav(std::string path, bool autoParse)
 {
     std::ifstream file(path, std::ifstream::binary);
+    
+    if(file.rdstate() & file.failbit){
+        return;
+    }
 
     // get the file size    
     file.seekg(0, file.end);
