@@ -1,6 +1,6 @@
 echo "building..."
 g++ src/main.cpp src/files/wav/openWav.cpp src/display/window.cpp \
-    src/display/tab.cpp                                           -I"./src/include" \
+    src/display/tab.cpp src/imgui/misc/cpp/imgui_stdlib.cpp -I"./src" -I"./src/include" \
     -L"./build" -lsfml-graphics -lsfml-window -lsfml-system -lImGui-SFML\
     -o build/sig -std=c++2a
 echo "done building."

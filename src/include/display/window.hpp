@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <display/tab.hpp>
 #include <memory>
+#include <files/openWav.hpp>
+#include <imgui/misc/cpp/imgui_stdlib.h>
 
 class disp
 {
@@ -35,6 +37,12 @@ public:
     float *getMoveAmountPtr();
 
     /**
+     * @brief open a wav file to be displayed
+     * 
+     */
+    void openWavFile(std::string path);
+
+    /**
      * @brief add a text to the debug window
      * 
      * @param text the debug text
@@ -46,7 +54,7 @@ private:
     //sf::RenderWindow *window;
     std::shared_ptr<sf::RenderWindow> window;
 
-    std::unique_ptr<waveForm> x = std::make_unique<waveForm>();
+    std::unique_ptr<waveForm> waveFormWindow = std::make_unique<waveForm>();
 
     enum windowEvents
     {
@@ -60,6 +68,15 @@ private:
         moveLeft,
         moveRight
     };
+
+    enum tabs
+    {
+        waveformTab
+    };
+    
+    std::string fileName;
+
+    int currentTab = waveformTab;
 
     bool mouseIsDown;
 
@@ -92,6 +109,34 @@ private:
      * @param amount the amount of zoom (negative to zoom in, positive to zoom out)
      */
     void zoomY(float amount);
+
+    /**
+     * @brief Get the zoom in the x axis of the current window
+     * 
+     * @return float 
+     */
+    float getZoomX();
+
+    /**
+     * @brief Get the zoom in the y axis of the current window
+     * 
+     * @return float 
+     */
+    float getZoomY();
+
+    /**
+     * @brief Set the amount of zoom in the x axis of the current window
+     * 
+     * @param value zoom amount in the x axis
+     */
+    void setZoomX(float value);
+
+    /**
+     * @brief Set the amount of zoom in the y axis of the current window
+     * 
+     * @param value zoom amount in the y axis
+     */
+    void setZoomY(float value);
 
     /**
      * @brief draw the UI for movement

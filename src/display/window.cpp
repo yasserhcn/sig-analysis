@@ -10,10 +10,10 @@ disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 
 void disp::update()
 {
-    x->update();
+    waveFormWindow->update();
     //window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
     drawUI();
-    x->draw(window);
+    waveFormWindow->draw(window);
     window->setView(currentView);
 }
 
@@ -55,11 +55,11 @@ void disp::event(sf::Event e)
         {
             if(e.key.code == sf::Keyboard::Up)
             {
-                zoomY(0.2);
+                zoomY(0.05);
             }
             if(e.key.code == sf::Keyboard::Down)
             {
-                zoomY(-0.2);
+                zoomY(-0.05);
             }
             if(e.key.code == sf::Keyboard::Left)
             {
@@ -74,6 +74,25 @@ void disp::event(sf::Event e)
     }
 }
 
+void disp::openWavFile(std::string path)
+{
+    Wav file(path);
+    if( !file.checkValid()){
+        addDebugText("opening file at path : " + path +" failed");
+        return;
+    }
+
+    uint8_t channels = file.getAmountOfChannels();
+    uint32_t samples = file.getAmountOfSamples();
+    if(currentTab == waveformTab)
+    {
+        for (uint32_t i = 0; i < samples; i++)
+        {
+            waveFormWindow->addValue(file.getSample(i));
+        }
+    }
+}
+
 void disp::addDebugText(std::string text)
 {
     debugStrings.push_back(text);
@@ -81,10 +100,10 @@ void disp::addDebugText(std::string text)
 
 void disp::generateDebugData()
 {
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         debugData[i] = rand()%255;
-        x->addValue(debugData[i]);
+        waveFormWindow->addValue(debugData[i]);
     }
     
 }
@@ -100,16 +119,13 @@ void disp::zoomX(float amount)
         return;
     }
 
-    if(currentView.getViewport().width + amount < 0){
-        return;
+    if(currentTab == waveformTab)
+    {
+        float currentPosX = currentView.getCenter().x / waveFormWindow->getZoomX();
+        waveFormWindow->zoomX(amount);
+        currentPosX *= waveFormWindow->getZoomX();
+        currentView.setCenter(sf::Vector2f(currentPosX, currentView.getCenter().y));
     }
-
-    currentView.setViewport(sf::FloatRect(
-        currentView.getViewport().left - (amount / 2),
-        currentView.getViewport().top,
-        currentView.getViewport().width + amount,
-        currentView.getViewport().height
-    ));
 }
 
 void disp::zoomY(float amount)
@@ -118,21 +134,22 @@ void disp::zoomY(float amount)
         return;
     }
 
-    if(currentView.getViewport().height + amount < 0){
-        return;
+    if(currentTab == waveformTab)
+    {
+        waveFormWindow->zoomY(amount);
     }
-
-    currentView.setViewport(sf::FloatRect(
-        currentView.getViewport().left,
-        currentView.getViewport().top - (amount / 2),
-        currentView.getViewport().width,
-        currentView.getViewport().height + amount
-    ));
 }
 
 void disp::drawUI()
 {
     ImGui::Begin("hello world");
+
+    ImGui::Text("file");
+    ImGui::InputText("filename", &fileName);
+    ImGui::Text(fileName.c_str());
+    if(ImGui::Button("open file")){
+        openWavFile(fileName);
+    }
 
     // move settings 
     ImGui::Separator();
@@ -142,16 +159,12 @@ void disp::drawUI()
     // zoom settings
     ImGui::Separator();
     ImGui::Text("zoom");
-    float windowWidth = currentView.getViewport().width;
-    float windowHeight = currentView.getViewport().height;
-    ImGui::SliderFloat("window width", &windowWidth, 0.08, 2);
-    ImGui::SliderFloat("window height", &windowHeight, 0.08, 2);
-    currentView.setViewport(sf::FloatRect(
-        currentView.getViewport().left,
-        currentView.getViewport().top,
-        windowWidth,
-        windowHeight
-    ));
+    float windowWidth = getZoomX();
+    float windowHeight = getZoomY();
+    ImGui::SliderFloat("window width", &windowWidth, 0.09, 1);
+    ImGui::SliderFloat("window height", &windowHeight, 0.001, 0.05);
+    setZoomX(windowWidth);
+    setZoomY(windowHeight);
 
     // debug stuff
     ImGui::Separator();
@@ -172,6 +185,40 @@ void disp::drawUI()
 float *disp::getMoveAmountPtr()
 {
     return &moveAmount;
+}
+
+float disp::getZoomX()
+{
+    if(currentTab == waveformTab){
+        return waveFormWindow->getZoomX();
+    }
+    return -1;
+}
+
+float disp::getZoomY()
+{
+    if(currentTab == waveformTab){
+        return waveFormWindow->getZoomY();
+    }
+    return -1;
+}
+
+void disp::setZoomX(float value)
+{
+    float difference = 0;
+    if(currentTab == waveformTab){
+        difference = value - waveFormWindow->getZoomX();
+    }
+    zoomX(difference);
+}
+
+void disp::setZoomY(float value)
+{
+    float difference = 0;
+    if(currentTab == waveformTab){
+        difference = value - waveFormWindow->getZoomY();
+    }
+    zoomY(difference);
 }
 
 disp::~disp()

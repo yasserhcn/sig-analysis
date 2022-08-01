@@ -4,6 +4,7 @@
 #include <fstream>
 #include <memory>
 #include <algorithm>
+#include <vector>
 
 #define CHECK_BOOL(x, y) (x = x && y)
 
@@ -31,17 +32,57 @@ public:
     bool checkValid();
 
     /**
+     * @brief return the size of the file
+     * 
+     * @return uint64_t 
+     */
+    uint64_t getFileSize();
+
+    /**
+     * @brief return the amount of channels in the file
+     * 
+     * @return uint8_t 
+     */
+    uint8_t getAmountOfChannels();
+
+    /**
+     * @brief return the amount of samples
+     * 
+     * @return int 
+     */
+    int64_t getAmountOfSamples();
+
+    /**
+     * @brief return the sample value
+     * 
+     * @param position the index of the sample
+     * @param channel the channel the sample is in (must not be more than the amount of channels in the file)
+     * @return uint64_t 
+     */
+    uint64_t getSample(uint32_t position, uint8_t channel = 0);
+
+    /**
      * @brief used for debugging
      * 
      * @return int value
      */
-    u_int32_t debugVal();
+    int32_t debugVal();
     char debugVar[4];
 
     ~Wav();
 private:
-    std::shared_ptr<uint8_t> data;
-    std::shared_ptr<uint8_t> buffer;
+    // vector of channels, each channel has a pointer to an array with the data
+    std::vector<std::shared_ptr<int64_t>> channels;
+    // amount of data points
+    uint64_t dataPointsSize;
+
+    // pointer to the file buffer
+    std::shared_ptr<int8_t> buffer;
+    // size of the file buffer
+    uint64_t bufferSize;
+
+    // indicates a fail in opening the file or another operation
+    bool fail = false;
 
     struct riffHeaderData
     {
@@ -54,13 +95,19 @@ private:
     {
         const char chunkId[4] = {'f', 'm', 't', ' '};
         uint32_t chunkSize = 0;
-        u_int8_t audioFormat;
-        u_int8_t numChannels;
-        u_int32_t sampleRate;
+        int8_t audioFormat;
+        int8_t numChannels;
+        int32_t sampleRate;
         uint32_t byteRate;
-        u_int8_t blockAlign;
-        u_int8_t bitsPerSample;
+        int8_t blockAlign;
+        int8_t bitsPerSample;
     }fmtChunk;
+
+    struct dataChunkData
+    {
+        const char chunkId[4] = { 'd', 'a', 't', 'a'};
+        uint32_t chunkSize;
+    }dataChunk;
     
     /**
      * @brief parse the header of the file
@@ -93,7 +140,7 @@ private:
      * 
      * @return int size
      */
-    int getHeaderSize();
+    uint32_t getHeaderSize();
 
     /**
      * @brief check if the file is wave
@@ -114,48 +161,65 @@ private:
      * 
      * @return int size
      */
-    int getFmtSize();
+    uint32_t getFmtSize();
 
     /**
      * @brief get thee audio format
      * 
      * @return int with format value
      */
-    int getFmtFormat();
+    int16_t getFmtFormat();
 
     /**
      * @brief get the number of channels in the file
      * 
      * @return int with the number of channels
      */
-    int getFmtNumChannels();
+    int16_t getFmtNumChannels();
 
     /**
      * @brief get the sample rate
      * 
      * @return int with the sample rate
      */
-    u_int32_t getFmtSampleRate();
+    int32_t getFmtSampleRate();
 
     /**
      * @brief get the byte rate
      * 
      * @return int with the bytee rate
      */
-    int getFmtByteRate();
+    uint32_t getFmtByteRate();
 
     /**
      * @brief get thte block align value
      * 
      * @return int with the value of block align
      */
-    int getFmtBlockAlign();
+    int16_t getFmtBlockAlign();
 
     /**
      * @brief get the bits per sample field
      * 
      * @brief int with the amount of bits per sample
      */
-    int getFmtBitsPerSample();
+    uint16_t getFmtBitsPerSample();
+
+    /**
+     * @brief validate the data header
+     * 
+     * @return true if the data header is valid
+     */
+    bool checkData();
+    
+    /**
+     * @brief Get the size of the data section
+     * 
+     * @return int with the size of the data section
+     */
+    uint32_t getDataChunkSize();
+
+    // get the data from the data chunk
+    void fetchData();
 };
 
