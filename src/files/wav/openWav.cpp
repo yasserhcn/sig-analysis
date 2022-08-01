@@ -6,6 +6,8 @@ Wav::Wav(std::string path, bool autoParse)
     std::ifstream file(path, std::ifstream::binary);
     
     if(file.rdstate() & file.failbit){
+        fail = true;
+        file.close();
         return;
     }
 
@@ -19,6 +21,7 @@ Wav::Wav(std::string path, bool autoParse)
     std::shared_ptr<int8_t> bufferData(new int8_t[length], std::default_delete<int8_t[]>());
     //char * buffer = new char [length];
     file.read( (char *)bufferData.get(), length );
+    file.close();
 
     buffer = bufferData;
 
@@ -53,6 +56,10 @@ uint64_t Wav::getSample(uint32_t position, uint8_t channel)
 
 bool Wav::checkValid()
 {
+    if(fail){
+        return false;
+    }
+
     bool isValid = true;
     CHECK_BOOL(isValid, checkRiff());
     CHECK_BOOL(isValid, checkFmtId());

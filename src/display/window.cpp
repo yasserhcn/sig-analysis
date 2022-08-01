@@ -78,6 +78,7 @@ void disp::openWavFile(std::string path)
 {
     Wav file(path);
     if( !file.checkValid()){
+        addDebugText("opening file at path : " + path +" failed");
         return;
     }
 

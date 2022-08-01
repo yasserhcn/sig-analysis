@@ -81,6 +81,9 @@ private:
     // size of the file buffer
     uint64_t bufferSize;
 
+    // indicates a fail in opening the file or another operation
+    bool fail = false;
+
     struct riffHeaderData
     {
         const char chunkId[4] = { 'R', 'I', 'F', 'F'};
