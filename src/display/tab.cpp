@@ -40,6 +40,12 @@ void waveForm::addValue(int64_t val)
     dataPoints.push_back(val);
 }
 
+void waveForm::eraseAllData()
+{
+    dataPoints.clear();
+    graph.clear();
+}
+
 void waveForm::draw(std::shared_ptr<sf::RenderWindow> windowIn)
 {
     windowIn->draw(&graph[0], graph.getVertexCount(), sf::LineStrip);

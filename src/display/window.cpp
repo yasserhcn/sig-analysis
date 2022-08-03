@@ -84,6 +84,9 @@ void disp::openWavFile(std::string path)
 
     uint8_t channels = file.getAmountOfChannels();
     uint32_t samples = file.getAmountOfSamples();
+
+    waveFormWindow->eraseAllData();
+
     if(currentTab == waveformTab)
     {
         for (uint32_t i = 0; i < samples; i++)
@@ -161,7 +164,7 @@ void disp::drawUI()
     ImGui::Text("zoom");
     float windowWidth = getZoomX();
     float windowHeight = getZoomY();
-    ImGui::SliderFloat("window width", &windowWidth, 0.09, 1);
+    ImGui::SliderFloat("window width", &windowWidth, 0.09, 2);
     ImGui::SliderFloat("window height", &windowHeight, 0.001, 0.05);
     setZoomX(windowWidth);
     setZoomY(windowHeight);

@@ -76,6 +76,12 @@ public:
     void addValue(int64_t val);
 
     /**
+     * @brief removes all the data points from the tab
+     * 
+     */
+    void eraseAllData();
+
+    /**
      * @brief draw the waveform
      * 
      */
