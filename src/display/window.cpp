@@ -4,6 +4,8 @@
 disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 :window(windowIn)
 {
+    data = std::make_shared<signalData>();
+    waveFormWindow = std::make_unique<waveForm>(data);
     generateDebugData();
     window->setView(currentView);
 }
@@ -85,13 +87,15 @@ void disp::openWavFile(std::string path)
     uint8_t channels = file.getAmountOfChannels();
     uint32_t samples = file.getAmountOfSamples();
 
-    waveFormWindow->eraseAllData();
+    //waveFormWindow->eraseAllData();
+    data->eraseWaveformData();
 
     if(currentTab == waveformTab)
     {
         for (uint32_t i = 0; i < samples; i++)
         {
-            waveFormWindow->addValue(file.getSample(i));
+            //waveFormWindow->addValue(file.getSample(i));
+            data->addWaveformPoint(file.getSample(i));
         }
     }
 }

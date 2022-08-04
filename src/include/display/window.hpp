@@ -5,6 +5,7 @@
 #include <memory>
 #include <files/openWav.hpp>
 #include <imgui/misc/cpp/imgui_stdlib.h>
+#include <display/data.hpp>
 
 class disp
 {
@@ -51,10 +52,12 @@ public:
 
     ~disp();
 private:
-    //sf::RenderWindow *window;
+
     std::shared_ptr<sf::RenderWindow> window;
 
-    std::unique_ptr<waveForm> waveFormWindow = std::make_unique<waveForm>();
+    std::unique_ptr<waveForm> waveFormWindow;
+
+    std::shared_ptr<signalData> data;
 
     enum windowEvents
     {
