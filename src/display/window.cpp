@@ -88,7 +88,7 @@ void disp::openWavFile(std::string path)
     uint32_t samples = file.getAmountOfSamples();
 
     data->eraseWaveformData();
-    data->setSampleRate(9600);
+    data->setSampleRate(file.getSampleRate());
 
     if(currentTab == waveformTab)
     {

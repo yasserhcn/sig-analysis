@@ -52,6 +52,8 @@ public:
      */
     int64_t getAmountOfSamples();
 
+    uint32_t getSampleRate();
+
     /**
      * @brief return the sample value
      * 
