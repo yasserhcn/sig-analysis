@@ -88,6 +88,7 @@ void disp::openWavFile(std::string path)
     uint32_t samples = file.getAmountOfSamples();
 
     data->eraseWaveformData();
+    data->setSampleRate(9600);
 
     if(currentTab == waveformTab)
     {
@@ -172,15 +173,16 @@ void disp::drawUI()
     setZoomY(windowHeight);
 
     // current position
-    ImGui::Separator();
-    ImGui::Text("current position");
-    if(currentTab == waveformTab)
+    if(currentTab == waveformTab &&  data->getSampleRate() > 0)
     {
-        float currentPosition = currentView.getCenter().x / getZoomX();
-        ImGui::SliderFloat("view position", &currentPosition, 0, data->getWaveformSize());
-        if(currentPosition != currentView.getCenter().x / getZoomX())
+        ImGui::Separator();
+        ImGui::Text("current position");
+        float currentPosition = currentView.getCenter().x / getZoomX() / data->getSampleRate();
+        float maxVal = getDuration();
+        ImGui::SliderFloat("view position", &currentPosition, 0, maxVal);
+        if(currentPosition != currentView.getCenter().x / getZoomX() / data->getSampleRate())
         {
-            currentView.setCenter(sf::Vector2f(currentPosition * getZoomX(), currentView.getCenter().y));
+            currentView.setCenter(sf::Vector2f(currentPosition * getZoomX() * data->getSampleRate(), currentView.getCenter().y));
         }
     }
 
@@ -237,6 +239,11 @@ void disp::setZoomY(float value)
         difference = value - waveFormWindow->getZoomY();
     }
     zoomY(difference);
+}
+
+float disp::getDuration()
+{
+    return data->getWaveformSize() / data->getSampleRate();
 }
 
 disp::~disp()

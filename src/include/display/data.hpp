@@ -35,10 +35,24 @@ public:
     int64_t getWaveformData(uint64_t index);
     
     /**
-     * @brief eraseall the waveform data
+     * @brief erase all the waveform data
      * 
      */
     void eraseWaveformData();
+
+    /**
+     * @brief Set the amount of samples per second
+     * 
+     * @param val samplerate value
+     */
+    void setSampleRate(int32_t val);
+
+    /**
+     * @brief get the amount of samples for every second
+     * 
+     * @return int32_t 
+     */
+    int32_t getSampleRate();
 
     /**
      * @brief Destroy the signal Data object
@@ -47,5 +61,8 @@ public:
     ~signalData();
     
 private:
+
     std::vector<int64_t> waveformDataPoints;
+
+    int32_t sampleRate;
 };

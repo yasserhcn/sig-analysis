@@ -24,6 +24,16 @@ void signalData::eraseWaveformData()
     waveformDataPoints.clear();
 }
 
+void signalData::setSampleRate(int32_t val)
+{
+    sampleRate = val;
+}
+
+int32_t signalData::getSampleRate()
+{
+    return sampleRate;
+}
+
 signalData::~signalData()
 {
 }

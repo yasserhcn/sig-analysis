@@ -146,4 +146,11 @@ private:
      * 
      */
     void drawUI();
+
+    /**
+     * @brief returns the duration of the current signal
+     * 
+     * @return the duration in seconds
+     */
+    float getDuration();
 };
