@@ -87,14 +87,12 @@ void disp::openWavFile(std::string path)
     uint8_t channels = file.getAmountOfChannels();
     uint32_t samples = file.getAmountOfSamples();
 
-    //waveFormWindow->eraseAllData();
     data->eraseWaveformData();
 
     if(currentTab == waveformTab)
     {
         for (uint32_t i = 0; i < samples; i++)
         {
-            //waveFormWindow->addValue(file.getSample(i));
             data->addWaveformPoint(file.getSample(i));
         }
     }
@@ -172,6 +170,19 @@ void disp::drawUI()
     ImGui::SliderFloat("window height", &windowHeight, 0.001, 0.05);
     setZoomX(windowWidth);
     setZoomY(windowHeight);
+
+    // current position
+    ImGui::Separator();
+    ImGui::Text("current position");
+    if(currentTab == waveformTab)
+    {
+        float currentPosition = currentView.getCenter().x / getZoomX();
+        ImGui::SliderFloat("view position", &currentPosition, 0, data->getWaveformSize());
+        if(currentPosition != currentView.getCenter().x / getZoomX())
+        {
+            currentView.setCenter(sf::Vector2f(currentPosition * getZoomX(), currentView.getCenter().y));
+        }
+    }
 
     // debug stuff
     ImGui::Separator();
