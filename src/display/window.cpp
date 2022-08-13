@@ -11,13 +11,13 @@ disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 
 void disp::update()
 {
+    window->setView(currentView);
     waveFormWindow->update();
     drawUI();
     if(currentTab == waveformTab){
         waveFormWindow->draw(window);
     }
     drawTimeScale();
-    window->setView(currentView);
 }
 
 void disp::event(sf::Event e)
@@ -177,6 +177,11 @@ void disp::drawUI()
         }
     }
 
+    ImGui::Text("time scale position");
+    float timeScalePosTemp = timeScalePosition;
+    ImGui::SliderFloat("position", &timeScalePosTemp, -20.0, 2000.0);
+    timeScalePosition = timeScalePosTemp;
+
     // debug stuff
     ImGui::Separator();
     if(ImGui::TreeNode("debug data"))
@@ -241,20 +246,21 @@ void disp::drawTimeScale()
 {
     float duration = getDuration();
 
-    if((int)duration < duration){
+    /*if((int)duration < duration){
         duration += 1;
-    }
+    }*/
 
     sf::RectangleShape tick;
     tick.setFillColor(sf::Color::White);
-    for (uint32_t i = 0; i < duration * 10; i++)
+    int32_t sampleRate = data->getSampleRate();
+    for (int32_t i = 0; i < duration * 10; i++)
     {
         if(i % 10 == 0){
             tick.setSize(sf::Vector2f(2, 20));
         }else{
             tick.setSize(sf::Vector2f(1, 10));
         }
-        tick.setPosition(sf::Vector2f(i * getZoomX() * data->getSampleRate() / 10, timeScalePosition));
+        tick.setPosition(sf::Vector2f((i * getZoomX() * sampleRate) / 10.0, timeScalePosition));
         window->draw(tick);
     }
     
