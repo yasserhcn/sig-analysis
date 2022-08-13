@@ -6,16 +6,17 @@ disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 {
     data = std::make_shared<signalData>();
     waveFormWindow = std::make_unique<waveForm>(data);
-    generateDebugData();
     window->setView(currentView);
 }
 
 void disp::update()
 {
     waveFormWindow->update();
-    //window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
     drawUI();
-    waveFormWindow->draw(window);
+    if(currentTab == waveformTab){
+        waveFormWindow->draw(window);
+    }
+    drawTimeScale();
     window->setView(currentView);
 }
 
@@ -102,16 +103,6 @@ void disp::openWavFile(std::string path)
 void disp::addDebugText(std::string text)
 {
     debugStrings.push_back(text);
-}
-
-void disp::generateDebugData()
-{
-    for (int i = 0; i < 100; i++)
-    {
-        debugData[i] = rand()%255;
-        waveFormWindow->addValue(debugData[i]);
-    }
-    
 }
 
 void disp::moveView(sf::Vector2f direction)
@@ -243,7 +234,30 @@ void disp::setZoomY(float value)
 
 float disp::getDuration()
 {
-    return data->getWaveformSize() / data->getSampleRate();
+    return data->getWaveformSize() / (float)data->getSampleRate();
+}
+
+void disp::drawTimeScale()
+{
+    float duration = getDuration();
+
+    if((int)duration < duration){
+        duration += 1;
+    }
+
+    sf::RectangleShape tick;
+    tick.setFillColor(sf::Color::White);
+    for (uint32_t i = 0; i < duration * 10; i++)
+    {
+        if(i % 10 == 0){
+            tick.setSize(sf::Vector2f(2, 20));
+        }else{
+            tick.setSize(sf::Vector2f(1, 10));
+        }
+        tick.setPosition(sf::Vector2f(i * getZoomX() * data->getSampleRate() / 10, timeScalePosition));
+        window->draw(tick);
+    }
+    
 }
 
 disp::~disp()

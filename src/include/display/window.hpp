@@ -85,12 +85,11 @@ private:
 
     sf::View currentView;
 
-    float moveAmount = 1;
-
-    void generateDebugData();
-    char debugData[1000];
+    float moveAmount = 50;
 
     std::vector<std::string> debugStrings;
+
+    int timeScalePosition = 10;
 
     /**
      * @brief move the view in a certain direction
@@ -153,4 +152,10 @@ private:
      * @return the duration in seconds
      */
     float getDuration();
+
+    /**
+     * @brief draw the timescale
+     * 
+     */
+    void drawTimeScale();
 };
