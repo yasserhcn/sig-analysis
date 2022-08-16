@@ -43,6 +43,11 @@ int64_t Wav::getAmountOfSamples()
     return (dataChunk.chunkSize / fmtChunk.blockAlign);
 }
 
+uint32_t Wav::getSampleRate()
+{
+    return fmtChunk.sampleRate;
+}
+
 uint64_t Wav::getSample(uint32_t position, uint8_t channel)
 {
     if(channel > fmtChunk.numChannels){

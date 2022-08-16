@@ -5,6 +5,7 @@
 #include <memory>
 #include <files/openWav.hpp>
 #include <imgui/misc/cpp/imgui_stdlib.h>
+#include <display/data.hpp>
 
 class disp
 {
@@ -51,10 +52,12 @@ public:
 
     ~disp();
 private:
-    //sf::RenderWindow *window;
+
     std::shared_ptr<sf::RenderWindow> window;
 
-    std::unique_ptr<waveForm> waveFormWindow = std::make_unique<waveForm>();
+    std::unique_ptr<waveForm> waveFormWindow;
+
+    std::shared_ptr<signalData> data;
 
     enum windowEvents
     {
@@ -82,12 +85,11 @@ private:
 
     sf::View currentView;
 
-    float moveAmount = 1;
-
-    void generateDebugData();
-    char debugData[1000];
+    float moveAmount = 50;
 
     std::vector<std::string> debugStrings;
+
+    int timeScalePosition = 10;
 
     /**
      * @brief move the view in a certain direction
@@ -143,4 +145,17 @@ private:
      * 
      */
     void drawUI();
+
+    /**
+     * @brief returns the duration of the current signal
+     * 
+     * @return the duration in seconds
+     */
+    float getDuration();
+
+    /**
+     * @brief draw the timescale
+     * 
+     */
+    void drawTimeScale();
 };

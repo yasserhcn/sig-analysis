@@ -4,17 +4,20 @@
 disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 :window(windowIn)
 {
-    generateDebugData();
+    data = std::make_shared<signalData>();
+    waveFormWindow = std::make_unique<waveForm>(data);
     window->setView(currentView);
 }
 
 void disp::update()
 {
-    waveFormWindow->update();
-    //window->draw(&waveFormDebugLine[0], 100, sf::LineStrip);
-    drawUI();
-    waveFormWindow->draw(window);
     window->setView(currentView);
+    waveFormWindow->update();
+    drawUI();
+    if(currentTab == waveformTab){
+        waveFormWindow->draw(window);
+    }
+    drawTimeScale();
 }
 
 void disp::event(sf::Event e)
@@ -84,11 +87,15 @@ void disp::openWavFile(std::string path)
 
     uint8_t channels = file.getAmountOfChannels();
     uint32_t samples = file.getAmountOfSamples();
+
+    data->eraseWaveformData();
+    data->setSampleRate(file.getSampleRate());
+
     if(currentTab == waveformTab)
     {
         for (uint32_t i = 0; i < samples; i++)
         {
-            waveFormWindow->addValue(file.getSample(i));
+            data->addWaveformPoint(file.getSample(i));
         }
     }
 }
@@ -96,16 +103,6 @@ void disp::openWavFile(std::string path)
 void disp::addDebugText(std::string text)
 {
     debugStrings.push_back(text);
-}
-
-void disp::generateDebugData()
-{
-    for (int i = 0; i < 100; i++)
-    {
-        debugData[i] = rand()%255;
-        waveFormWindow->addValue(debugData[i]);
-    }
-    
 }
 
 void disp::moveView(sf::Vector2f direction)
@@ -161,10 +158,29 @@ void disp::drawUI()
     ImGui::Text("zoom");
     float windowWidth = getZoomX();
     float windowHeight = getZoomY();
-    ImGui::SliderFloat("window width", &windowWidth, 0.09, 1);
+    ImGui::SliderFloat("window width", &windowWidth, 0.09, 2);
     ImGui::SliderFloat("window height", &windowHeight, 0.001, 0.05);
     setZoomX(windowWidth);
     setZoomY(windowHeight);
+
+    // current position
+    if(currentTab == waveformTab &&  data->getSampleRate() > 0)
+    {
+        ImGui::Separator();
+        ImGui::Text("current position");
+        float currentPosition = currentView.getCenter().x / getZoomX() / data->getSampleRate();
+        float maxVal = getDuration();
+        ImGui::SliderFloat("view position", &currentPosition, 0, maxVal);
+        if(currentPosition != currentView.getCenter().x / getZoomX() / data->getSampleRate())
+        {
+            currentView.setCenter(sf::Vector2f(currentPosition * getZoomX() * data->getSampleRate(), currentView.getCenter().y));
+        }
+    }
+
+    ImGui::Text("time scale position");
+    float timeScalePosTemp = timeScalePosition;
+    ImGui::SliderFloat("position", &timeScalePosTemp, -20.0, 2000.0);
+    timeScalePosition = timeScalePosTemp;
 
     // debug stuff
     ImGui::Separator();
@@ -219,6 +235,35 @@ void disp::setZoomY(float value)
         difference = value - waveFormWindow->getZoomY();
     }
     zoomY(difference);
+}
+
+float disp::getDuration()
+{
+    return data->getWaveformSize() / (float)data->getSampleRate();
+}
+
+void disp::drawTimeScale()
+{
+    float duration = getDuration();
+
+    /*if((int)duration < duration){
+        duration += 1;
+    }*/
+
+    sf::RectangleShape tick;
+    tick.setFillColor(sf::Color::White);
+    int32_t sampleRate = data->getSampleRate();
+    for (int32_t i = 0; i < duration * 10; i++)
+    {
+        if(i % 10 == 0){
+            tick.setSize(sf::Vector2f(2, 20));
+        }else{
+            tick.setSize(sf::Vector2f(1, 10));
+        }
+        tick.setPosition(sf::Vector2f((i * getZoomX() * sampleRate) / 10.0, timeScalePosition));
+        window->draw(tick);
+    }
+    
 }
 
 disp::~disp()
