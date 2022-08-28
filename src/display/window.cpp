@@ -12,9 +12,10 @@ disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
 void disp::update()
 {
     window->setView(currentView);
-    waveFormWindow->update();
     drawUI();
     if(currentTab == waveformTab){
+        waveFormWindow->update(currentView.getCenter() - sf::Vector2f(currentView.getSize().x / 2, currentView.getSize().y / 2)
+                             , currentView.getCenter() + sf::Vector2f(currentView.getSize().x / 2, currentView.getSize().y / 2));
         waveFormWindow->draw(window);
     }
     drawTimeScale();
