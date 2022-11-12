@@ -107,7 +107,7 @@ public:
      * @brief update the current waveform drawing
      * 
      */
-    void update();
+    void update(sf::Vector2f topLeftWindowPos, sf::Vector2f bottomRightPos);
 
     /**
      * @brief Get the Amount Data Points
