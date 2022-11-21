@@ -7,17 +7,25 @@ disp::disp(std::shared_ptr<sf::RenderWindow> windowIn)
     data = std::make_shared<signalData>();
     waveFormWindow = std::make_unique<waveForm>(data);
     window->setView(currentView);
+
+    waterfallWindow = std::make_unique<waterFall>(data);
 }
 
 void disp::update()
 {
     window->setView(currentView);
     drawUI();
+
     if(currentTab == waveformTab){
         waveFormWindow->update(currentView.getCenter() - sf::Vector2f(currentView.getSize().x / 2, currentView.getSize().y / 2)
                              , currentView.getCenter() + sf::Vector2f(currentView.getSize().x / 2, currentView.getSize().y / 2));
         waveFormWindow->draw(window);
+    }else
+    if(currentTab == waterfallTab){
+        waterfallWindow->update();
+        waterfallWindow->draw(window);
     }
+
     drawTimeScale();
 }
 
@@ -147,6 +155,15 @@ void disp::drawUI()
     ImGui::Text(fileName.c_str());
     if(ImGui::Button("open file")){
         openWavFile(fileName);
+    }
+
+    // current window settings
+    ImGui::Separator();
+    if(ImGui::Button("waveform")){
+        currentTab = waveformTab;
+    }
+    if(ImGui::Button("waterfall")){
+        currentTab = waterfallTab;
     }
 
     // move settings 

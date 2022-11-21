@@ -125,3 +125,87 @@ waveForm::~waveForm()
 {
     
 }
+
+////////////////////////////////////////////////////
+
+waterFall::waterFall(std::shared_ptr<signalData> dataIn)
+: tab(dataIn)
+{
+}
+
+void waterFall::recalculateFft()
+{
+    // recalculate the fft data
+    std::shared_ptr<std::vector<std::complex<float>>> tempData = std::make_shared<std::vector<std::complex<float>>>();
+    int fftDuration = getData()->getWaveformSize() / fftsize;
+    
+    for (int j = 0; j < fftDuration; j++)
+    {
+        for (int i = 0; i < fftsize; i++)
+        {
+            std::complex<float> dataPoint;
+            dataPoint.real(getData()->getWaveformData(i + (j * fftsize)));
+            tempData->push_back(dataPoint);
+        }
+        fftData.push_back(fft(tempData, fftsize));
+        tempData->clear();
+    }
+    
+    // update the image data
+    fftTexture.create(fftsize, fftDuration);
+    fftImage.create(fftsize, fftDuration);
+    
+    for (int y = 0; y < fftDuration; y++)
+    {
+        for (int x = 0; x < fftsize; x++)
+        {
+            sf::Color pixel(0, 0, 0, 255);
+            pixel.r = fftData[y]->at(x).real() / 20;
+
+            fftImage.setPixel(x, y, pixel);
+        }
+        
+    }
+
+    fftTexture.loadFromImage(fftImage);
+    fftSprite.setTexture(fftTexture);
+}
+
+void waterFall::draw(std::shared_ptr<sf::RenderWindow> windowIn)
+{
+    windowIn->draw(fftSprite);
+}
+
+void waterFall::drawUI()
+{
+
+}
+
+void waterFall::update()
+{
+    if(tempDebug)
+    {
+        recalculateFft();
+        tempDebug = false;
+    }
+}
+
+bool waterFall::setFftSize(int size)
+{
+    if(size != 256 || size != 512 || size != 1024 || size != 2048 ){
+        return false;
+    }
+
+    fftsize = size;
+    return true;
+}
+
+void waterFall::addDataPoint(int64_t value)
+{
+    dataPoints.push_back(value);
+}
+
+void waterFall::eraseAllData()
+{
+
+}

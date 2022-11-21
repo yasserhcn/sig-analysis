@@ -56,6 +56,7 @@ private:
     std::shared_ptr<sf::RenderWindow> window;
 
     std::unique_ptr<waveForm> waveFormWindow;
+    std::unique_ptr<waterFall> waterfallWindow;
 
     std::shared_ptr<signalData> data;
 
@@ -74,7 +75,8 @@ private:
 
     enum tabs
     {
-        waveformTab
+        waveformTab,
+        waterfallTab
     };
     
     std::string fileName;
