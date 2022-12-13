@@ -137,14 +137,18 @@ void waterFall::recalculateFft()
 {
     // recalculate the fft data
     std::shared_ptr<std::vector<std::complex<float>>> tempData = std::make_shared<std::vector<std::complex<float>>>();
-    int fftDuration = getData()->getWaveformSize() / fftsize;
+    int fftDuration = getData()->getWaveformSize() / fftOffset;
+
     
     for (int j = 0; j < fftDuration; j++)
     {
+        if((j * fftOffset) + fftsize > getData()->getWaveformSize()){
+            break;
+        }
         for (int i = 0; i < fftsize; i++)
         {
             std::complex<float> dataPoint;
-            dataPoint.real(getData()->getWaveformData(i + (j * fftsize)));
+            dataPoint.real(getData()->getWaveformData(i + (j * fftOffset)));
             tempData->push_back(dataPoint);
         }
         fftData.push_back(fft(tempData, fftsize));
@@ -161,6 +165,8 @@ void waterFall::recalculateFft()
         {
             sf::Color pixel(0, 0, 0, 255);
             pixel.r = fftData[y]->at(x).real() / 20;
+            pixel.g = fftData[y]->at(x).real() / 20;
+            pixel.b = fftData[y]->at(x).real() / 20;
 
             fftImage.setPixel(x, y, pixel);
         }
@@ -203,6 +209,21 @@ bool waterFall::setFftSize(int size)
 void waterFall::addDataPoint(int64_t value)
 {
     dataPoints.push_back(value);
+}
+
+int waterFall::getFftOffset()
+{
+    return fftOffset;
+}
+
+void waterFall::setFftOffset(int offset)
+{
+    fftOffset = offset;
+}
+
+int waterFall::getFftSize()
+{
+    return fftsize;
 }
 
 void waterFall::eraseAllData()

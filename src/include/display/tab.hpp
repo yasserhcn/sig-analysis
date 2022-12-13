@@ -178,6 +178,27 @@ public:
      */
     void eraseAllData();
 
+    /**
+     * @brief get the offset of the fft
+     * 
+     * @return int the fft offset
+     */
+    int getFftOffset();
+
+    /**
+     * @brief Set the fft fffset
+     * 
+     * @param offset amount of offset
+     */
+    void setFftOffset(int offset);
+
+    /**
+     * @brief Get the size of the fft
+     * 
+     * @return int with the size
+     */
+    int getFftSize();
+
 private:
     std::vector<int64_t> dataPoints;
 
@@ -188,6 +209,7 @@ private:
     sf::Texture fftTexture;
 
     int fftsize = 512;
+    int fftOffset = 512;
 
     bool tempDebug = true;
 };

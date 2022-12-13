@@ -131,6 +131,14 @@ void disp::zoomX(float amount)
         waveFormWindow->zoomX(amount);
         currentPosX *= waveFormWindow->getZoomX();
         currentView.setCenter(sf::Vector2f(currentPosX, currentView.getCenter().y));
+    }else
+    if(currentTab == waterfallTab)
+    {
+        float currentPosX = currentView.getCenter().x / waterfallWindow->getZoomX();
+        waterfallWindow->zoomX(amount);
+        currentPosX *= waterfallWindow->getZoomX();
+        currentView.setCenter(sf::Vector2f(currentPosX, currentView.getCenter().y));
+
     }
 }
 
@@ -148,7 +156,7 @@ void disp::zoomY(float amount)
 
 void disp::drawUI()
 {
-    ImGui::Begin("hello world");
+    ImGui::Begin("menu");
 
     ImGui::Text("file");
     ImGui::InputText("filename", &fileName);
@@ -192,6 +200,20 @@ void disp::drawUI()
         if(currentPosition != currentView.getCenter().x / getZoomX() / data->getSampleRate())
         {
             currentView.setCenter(sf::Vector2f(currentPosition * getZoomX() * data->getSampleRate(), currentView.getCenter().y));
+        }
+    }
+
+    // fft settings
+    if(currentTab == waterfallTab)
+    {
+        ImGui::Separator();
+        ImGui::Text("fft iteration offset");
+        int currentOffset = waterfallWindow->getFftOffset();
+        int maxOffset = waterfallWindow->getFftSize();
+        ImGui::SliderInt("fft offset", &currentOffset, 1, maxOffset);
+        waterfallWindow->setFftOffset(currentOffset);
+        if(ImGui::Button("recalculate")){
+            waterfallWindow->recalculateFft();
         }
     }
 
@@ -242,6 +264,9 @@ void disp::setZoomX(float value)
     float difference = 0;
     if(currentTab == waveformTab){
         difference = value - waveFormWindow->getZoomX();
+    }else
+    if(currentTab == waterfallTab){
+        difference = value - waterfallWindow->getZoomX();
     }
     zoomX(difference);
 }
@@ -251,6 +276,9 @@ void disp::setZoomY(float value)
     float difference = 0;
     if(currentTab == waveformTab){
         difference = value - waveFormWindow->getZoomY();
+    }else
+    if(currentTab == waterfallTab){
+        difference = value - waterfallWindow->getZoomY();
     }
     zoomY(difference);
 }
@@ -268,20 +296,38 @@ void disp::drawTimeScale()
         duration += 1;
     }*/
 
-    sf::RectangleShape tick;
-    tick.setFillColor(sf::Color::White);
-    int32_t sampleRate = data->getSampleRate();
-    for (int32_t i = 0; i < duration * 10; i++)
+    if(currentTab == waveformTab)
     {
-        if(i % 10 == 0){
-            tick.setSize(sf::Vector2f(2, 20));
-        }else{
-            tick.setSize(sf::Vector2f(1, 10));
+        sf::RectangleShape tick;
+        tick.setFillColor(sf::Color::White);
+        int32_t sampleRate = data->getSampleRate();
+        for (int32_t i = 0; i < duration * 10; i++)
+        {
+            if(i % 10 == 0){
+                tick.setSize(sf::Vector2f(2, 20));
+            }else{
+                tick.setSize(sf::Vector2f(1, 10));
+            }
+            tick.setPosition(sf::Vector2f((i * getZoomX() * sampleRate) / 10.0, timeScalePosition));
+            window->draw(tick);
         }
-        tick.setPosition(sf::Vector2f((i * getZoomX() * sampleRate) / 10.0, timeScalePosition));
-        window->draw(tick);
+    }else
+    if(currentTab == waterfallTab)
+    {
+        sf::RectangleShape tick;
+        tick.setFillColor(sf::Color::White);
+        int32_t sampleRate = data->getSampleRate();
+        for (int32_t i = 0; i < duration * 10; i++)
+        {
+            if(i % 10 == 0){
+                tick.setSize(sf::Vector2f(20, 2));
+            }else{
+                tick.setSize(sf::Vector2f(10, 1));
+            }
+            tick.setPosition(sf::Vector2f(timeScalePosition, (i * getZoomY() * sampleRate) / 10.0));
+            window->draw(tick);
+        }
     }
-    
 }
 
 disp::~disp()
