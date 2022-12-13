@@ -151,6 +151,10 @@ void disp::zoomY(float amount)
     if(currentTab == waveformTab)
     {
         waveFormWindow->zoomY(amount);
+    }else
+    if(currentTab == waterfallTab)
+    {
+        waterfallWindow->zoomY(amount);
     }
 }
 
@@ -248,6 +252,9 @@ float disp::getZoomX()
     if(currentTab == waveformTab){
         return waveFormWindow->getZoomX();
     }
+    if(currentTab == waterfallTab){
+        return waterfallWindow->getZoomX();
+    }
     return -1;
 }
 
@@ -255,6 +262,9 @@ float disp::getZoomY()
 {
     if(currentTab == waveformTab){
         return waveFormWindow->getZoomY();
+    }
+    if(currentTab == waterfallTab){
+        return waterfallWindow->getZoomY();
     }
     return -1;
 }

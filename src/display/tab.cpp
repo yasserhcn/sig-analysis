@@ -175,10 +175,12 @@ void waterFall::recalculateFft()
 
     fftTexture.loadFromImage(fftImage);
     fftSprite.setTexture(fftTexture);
+    fftSprite.setPosition(sf::Vector2f(350 - (fftsize / 2), 0));
 }
 
 void waterFall::draw(std::shared_ptr<sf::RenderWindow> windowIn)
 {
+    fftSprite.setScale(sf::Vector2f(getZoomX()*10, getZoomY()*100));
     windowIn->draw(fftSprite);
 }
 
