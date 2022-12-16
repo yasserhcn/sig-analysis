@@ -168,6 +168,10 @@ void disp::drawUI()
     if(ImGui::Button("open file")){
         openWavFile(fileName);
     }
+    // for debugging reasons
+    if(ImGui::Button("open debug file")){
+        openWavFile("test.wav");
+    }
 
     // current window settings
     ImGui::Separator();
