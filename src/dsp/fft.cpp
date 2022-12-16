@@ -4,7 +4,7 @@ std::shared_ptr<std::vector<std::complex<float>>> fft(std::shared_ptr<std::vecto
 {
 
     // validate that the size is a power of 2
-    if(fftSize != 256 && fftSize != 512 && fftSize != 1024 && fftSize != 2048)
+    if(fftSize != 256 && fftSize != 512 && fftSize != 1024 && fftSize != 2048 && fftSize != 4096)
     {
         return nullptr;
     }
