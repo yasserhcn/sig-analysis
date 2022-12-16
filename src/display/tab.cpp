@@ -142,9 +142,7 @@ void waterFall::recalculateFft()
     
     for (int j = 0; j < fftDuration; j++)
     {
-        if((j * fftOffset) + fftsize > getData()->getWaveformSize()){
-            break;
-        }
+
         for (int i = 0; i < fftsize; i++)
         {
             std::complex<float> dataPoint;
@@ -154,11 +152,14 @@ void waterFall::recalculateFft()
         fftData.push_back(fft(tempData, fftsize));
         tempData->clear();
     }
-    
+
     // update the image data
-    fftTexture.create(fftsize, fftDuration);
-    fftImage.create(fftsize, fftDuration);
+    if(fftTexture.create(fftsize, fftDuration) == 0){
+        return;
+    }
     
+    fftImage.create(fftsize, fftDuration);
+
     for (int y = 0; y < fftDuration; y++)
     {
         for (int x = 0; x < fftsize; x++)
