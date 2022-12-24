@@ -100,12 +100,9 @@ void disp::openWavFile(std::string path)
     data->eraseWaveformData();
     data->setSampleRate(file.getSampleRate());
 
-    if(currentTab == waveformTab)
+    for (uint32_t i = 0; i < samples; i++)
     {
-        for (uint32_t i = 0; i < samples; i++)
-        {
-            data->addWaveformPoint(file.getSample(i));
-        }
+        data->addWaveformPoint(file.getSample(i));
     }
 }
 
