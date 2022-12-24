@@ -208,7 +208,7 @@ private:
     sf::Image fftImage;
     sf::Texture fftTexture;
 
-    int fftsize = 512;
+    int fftsize = 2048;
     int fftOffset = 512;
 
     bool tempDebug = true;

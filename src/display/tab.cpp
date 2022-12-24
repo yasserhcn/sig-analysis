@@ -131,6 +131,10 @@ waveForm::~waveForm()
 waterFall::waterFall(std::shared_ptr<signalData> dataIn)
 : tab(dataIn)
 {
+    zoomX(-getZoomX() * 10);
+    zoomY(-getZoomY() * 10);
+    zoomX(1);
+    zoomY(0.25);
 }
 
 void waterFall::recalculateFft()
@@ -176,12 +180,13 @@ void waterFall::recalculateFft()
 
     fftTexture.loadFromImage(fftImage);
     fftSprite.setTexture(fftTexture);
-    fftSprite.setPosition(sf::Vector2f(350 - (fftsize / 2), 0));
+    // seet th position to the middle of the camera
+    fftSprite.setPosition(sf::Vector2f(0, 0));
 }
 
 void waterFall::draw(std::shared_ptr<sf::RenderWindow> windowIn)
 {
-    fftSprite.setScale(sf::Vector2f(getZoomX()*10, getZoomY()*100));
+    fftSprite.setScale(sf::Vector2f(((float)900)/fftsize * getZoomX()*10, getZoomY()*100));
     windowIn->draw(fftSprite);
 }
 
