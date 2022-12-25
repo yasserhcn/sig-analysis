@@ -143,8 +143,45 @@ void waterFall::recalculateFft()
     std::shared_ptr<std::vector<std::complex<float>>> tempData = std::make_shared<std::vector<std::complex<float>>>();
     int fftDuration = getData()->getWaveformSize() / fftOffset;
 
+    //TODO: rewrite the multithreading crap
+    // i accidentally deleted the file and now all the changes are gone
+    // F. M. L.
+
+    // update the image data
+    if(fftTexture.create(fftsize, fftDuration) == 0){
+        return;
+    }
+    fftImage.create(fftsize, fftDuration);
+
+    recalculateFftMultithreaded(4, fftDuration);
+    // seet th position to the middle of the camera
+    fftSprite.setPosition(sf::Vector2f(0, 0));
+}
+
+void waterFall::recalculateFftMultithreaded(int threads, int dataSize)
+{
+    std::vector<std::shared_ptr<std::thread>> threadObjs;
+
+    for(int i = 0; i < threads; i++)
+    {
+        std::shared_ptr<std::thread> t = std::make_shared<std::thread>
+            (&waterFall::recalculatePartOfFft, this, (i/(float)threads) * dataSize, ((i/(float)threads) * dataSize) - 1);
+        
+        threadObjs.push_back(t);
+    }
+
+    for (int i = 0; i < threads; i++)
+    {
+        threadObjs[i]->join();
+    }
     
-    for (int j = 0; j < fftDuration; j++)
+}
+
+void waterFall::recalculatePartOfFft(int start, int end)
+{
+    std::shared_ptr<std::vector<std::complex<float>>> tempData = std::make_shared<std::vector<std::complex<float>>>();
+    
+    for (int j = start; j < end; j++)
     {
 
         for (int i = 0; i < fftsize; i++)
@@ -157,14 +194,7 @@ void waterFall::recalculateFft()
         tempData->clear();
     }
 
-    // update the image data
-    if(fftTexture.create(fftsize, fftDuration) == 0){
-        return;
-    }
-    
-    fftImage.create(fftsize, fftDuration);
-
-    for (int y = 0; y < fftDuration; y++)
+    for (int y = start; y < end; y++)
     {
         for (int x = 0; x < fftsize; x++)
         {
@@ -180,8 +210,6 @@ void waterFall::recalculateFft()
 
     fftTexture.loadFromImage(fftImage);
     fftSprite.setTexture(fftTexture);
-    // seet th position to the middle of the camera
-    fftSprite.setPosition(sf::Vector2f(0, 0));
 }
 
 void waterFall::draw(std::shared_ptr<sf::RenderWindow> windowIn)

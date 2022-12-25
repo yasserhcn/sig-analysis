@@ -4,6 +4,7 @@
 #include <memory>
 #include <complex>
 #include <fstream>
+#include <thread>
 #include <../imgui/imgui.h>
 #include <display/data.hpp>
 #include <dsp/fft.hpp>
@@ -200,6 +201,11 @@ public:
     int getFftSize();
 
 private:
+
+    void recalculateFftMultithreaded(int thread, int dataSize);
+
+    void recalculatePartOfFft(int start, int end);
+
     std::vector<int64_t> dataPoints;
 
     std::vector<std::shared_ptr<std::vector<std::complex<float>>>> fftData;
