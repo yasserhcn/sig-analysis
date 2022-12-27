@@ -154,7 +154,10 @@ void waterFall::recalculateFft()
     fftImage.create(fftsize, fftDuration);
 
     recalculateFftMultithreaded(4, fftDuration);
-    // seet th position to the middle of the camera
+
+    fftTexture.loadFromImage(fftImage);
+    fftSprite.setTexture(fftTexture);
+    // set the position to the middle of the camera
     fftSprite.setPosition(sf::Vector2f(0, 0));
 }
 
@@ -165,7 +168,7 @@ void waterFall::recalculateFftMultithreaded(int threads, int dataSize)
     for(int i = 0; i < threads; i++)
     {
         std::shared_ptr<std::thread> t = std::make_shared<std::thread>
-            (&waterFall::recalculatePartOfFft, this, (i/(float)threads) * dataSize, ((i/(float)threads) * dataSize) - 1);
+            (&waterFall::recalculatePartOfFft, this, (i/(float)threads) * dataSize, (((i+1)/(float)threads) * dataSize) - 1);
         
         threadObjs.push_back(t);
     }
@@ -179,11 +182,25 @@ void waterFall::recalculateFftMultithreaded(int threads, int dataSize)
 
 void waterFall::recalculatePartOfFft(int start, int end)
 {
+    //TODO: fix crashing that's probably caused by threads looking for a pice of data in the vector before it's appended
+    //TODO: also vector will be a mess and will no longer be sorted
+    //TODO: find a way to insert into the vector in a sorted manner
+    // why did i think making it multithreaded rn is a good idea, sometimes i hate slightly younger me
     std::shared_ptr<std::vector<std::complex<float>>> tempData = std::make_shared<std::vector<std::complex<float>>>();
     
+    std::ofstream x("a.txt", std::ios::app);
+    x<<"nnn\n";
+    x<<"data size : " << getData()->getWaveformSize() << "\n";
+    x<<"#########################################\n";
+    x.flush();
+
     for (int j = start; j < end; j++)
     {
-
+        /*x<< start << " is the start/ j = " << j << "\n";
+        x<< "thread : " << ((float)start/(getData()->getWaveformSize() / (float)fftOffset)) * 4 << "\n";
+        x<<"max val : " << fftsize + (j * fftOffset) << " / min val : " << 0 + (j * fftOffset) << "\n";
+        x<<"\n/////////////////////////////\n";*/
+        x.flush();
         for (int i = 0; i < fftsize; i++)
         {
             std::complex<float> dataPoint;
@@ -194,22 +211,32 @@ void waterFall::recalculatePartOfFft(int start, int end)
         tempData->clear();
     }
 
+    x<<"hhh : " << ((float)start/(getData()->getWaveformSize() / (float)fftOffset)) * 4 << "\n";
+    x<<"data size : " << fftData.size() << "\n";
+    x.flush();
+
     for (int y = start; y < end; y++)
     {
+        x<<"y : " << y * fftOffset << "\n";
+        x<<"thread : " << ((float)start/(getData()->getWaveformSize() / (float)fftOffset)) * 4 << "\n";
+        x<<"\n//////////////////////////////////////\n";
+        x.flush();
         for (int x = 0; x < fftsize; x++)
         {
             sf::Color pixel(0, 0, 0, 255);
-            pixel.r = fftData[y]->at(x).real() / 20;
-            pixel.g = fftData[y]->at(x).real() / 20;
-            pixel.b = fftData[y]->at(x).real() / 20;
+            pixel.r = fftData[y * fftOffset]->at(x).real() / 20;
+            pixel.g = fftData[y * fftOffset]->at(x).real() / 20;
+            pixel.b = fftData[y * fftOffset]->at(x).real() / 20;
 
             fftImage.setPixel(x, y, pixel);
         }
-        
+        x<<"y : " << y * fftOffset << "\n";
+        x<<"thread : " << ((float)start/(getData()->getWaveformSize() / (float)fftOffset)) * 4 << "\n";
+        x<<"\n//////////////////////////////////////\n";
+        x.flush();
     }
-
-    fftTexture.loadFromImage(fftImage);
-    fftSprite.setTexture(fftTexture);
+    x<<"iii : " << ((float)start/(getData()->getWaveformSize() / (float)fftOffset)) * 4 << "\n";
+    x.flush();
 }
 
 void waterFall::draw(std::shared_ptr<sf::RenderWindow> windowIn)

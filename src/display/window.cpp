@@ -97,6 +97,9 @@ void disp::openWavFile(std::string path)
     uint8_t channels = file.getAmountOfChannels();
     uint32_t samples = file.getAmountOfSamples();
 
+    addDebugText("samples : " + std::to_string(samples));
+    addDebugText("random datapoint : " + std::to_string(file.getSample(0)==(uint64_t)-1 ? 1 : 0 ));
+
     data->eraseWaveformData();
     data->setSampleRate(file.getSampleRate());
 
