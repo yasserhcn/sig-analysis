@@ -34,6 +34,13 @@ int32_t signalData::getSampleRate()
     return sampleRate;
 }
 
+void signalData::addFftLine(int index)
+{
+    if(index >= currentThreadIndex.size() - 1){
+        currentThreadIndex.push_back(fftIndices(currentThreadIndex.at(currentThreadIndex.size() - 1).start + 1, 0 ));
+    }
+}
+
 signalData::~signalData()
 {
 }

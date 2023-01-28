@@ -2,6 +2,10 @@
 
 #include <vector>
 #include <memory>
+#include <complex>
+
+typedef std::shared_ptr<std::vector<std::complex<float>>> fftVec;
+
 
 class signalData
 {
@@ -55,6 +59,13 @@ public:
     int32_t getSampleRate();
 
     /**
+     * @brief insert an fft line
+     * 
+     * @param index the index of the current thread
+     */
+    void addFftLine(int index);
+
+    /**
      * @brief Destroy the signal Data object
      * 
      */
@@ -63,6 +74,19 @@ public:
 private:
 
     std::vector<int64_t> waveformDataPoints;
+
+    struct fftIndices
+    {
+        fftIndices(int startIndex, int dataSize):start(startIndex), size(dataSize){}
+
+        // point where the thread started
+        int start;
+        // amount of points in the vector that were added
+        int size;
+    };
+    
+    std::vector<fftVec> frequencyDataPoints;
+    std::vector<fftIndices> currentThreadIndex;
 
     int32_t sampleRate;
 };

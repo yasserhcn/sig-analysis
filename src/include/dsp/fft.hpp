@@ -5,4 +5,7 @@
 #include <math.h>
 #include <complex>
 
-std::shared_ptr<std::vector<std::complex<float>>> fft(std::shared_ptr<std::vector<std::complex<float>>> dataPoints, float fftSize);
+// frequencies of the sample
+typedef std::shared_ptr<std::vector<std::complex<float>>> fftVec;
+
+fftVec fft(fftVec dataPoints, float fftSize);
