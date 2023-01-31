@@ -99,7 +99,9 @@ void disp::openWavFile(std::string path)
 
     data->eraseWaveformData();
     data->setSampleRate(file.getSampleRate());
+    addDebugText(std::to_string(samples) + "\n");
 
+    //TODO: add support for multiple channels
     for (uint32_t i = 0; i < samples; i++)
     {
         data->addWaveformPoint(file.getSample(i));
@@ -157,6 +159,8 @@ void disp::zoomY(float amount)
 
 void disp::drawUI()
 {
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode); 
+
     ImGui::Begin("menu");
 
     ImGui::Text("file");
