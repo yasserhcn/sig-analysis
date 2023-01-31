@@ -52,6 +52,11 @@ public:
      */
     int64_t getAmountOfSamples();
 
+    /**
+     * @brief Get the sample rate of the file
+     * 
+     * @return uint32_t with the amount of samples in one second
+     */
     uint32_t getSampleRate();
 
     /**
