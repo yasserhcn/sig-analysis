@@ -56,7 +56,7 @@ uint64_t Wav::getSample(uint32_t position, uint8_t channel)
     if(position > getAmountOfSamples()){
         return -1;
     }
-    return channels[0].get()[position];
+    return channels[channel].get()[position];
 }
 
 bool Wav::checkValid()
@@ -292,21 +292,27 @@ void Wav::fetchData()
         {
             uint64_t dataPos = OFFSET_TO_DATA + ((i * fmtChunk.blockAlign) + currentChannel);
 
-            if(fmtChunk.bitsPerSample / 8 == 1){
-                
+            switch (fmtChunk.bitsPerSample / 8)
+            {
+            case 1:
                 channels[currentChannel].get()[i] = *(int8_t*)(buffer.get() + dataPos);
-            }
-            else if(fmtChunk.bitsPerSample / 8 == 2){
-                
+                break;
+            
+            case 2:
                 channels[currentChannel].get()[i] = *(int16_t*)(buffer.get() + dataPos);
-            }
-            else if(fmtChunk.bitsPerSample / 8 == 4){
-
+                break;
+            
+            case 4:
                 channels[currentChannel].get()[i] = *(int32_t*)(buffer.get() + dataPos);
-            }
-            else if(fmtChunk.bitsPerSample / 8 == 8){
-                
+                break;
+
+            case 8:
                 channels[currentChannel].get()[i] = *(int64_t*)(buffer.get() + dataPos);
+                break;
+            
+            default:
+                throw "error occured while fetching wav file data";
+                break;
             }
         }
         
