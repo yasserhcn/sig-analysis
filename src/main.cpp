@@ -31,6 +31,8 @@ int main()
                 window->close();
         }
 
+        ImGuiIO &io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         ImGui::SFML::Update(*window, delta.restart());
 
         window->clear();
