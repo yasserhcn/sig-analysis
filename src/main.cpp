@@ -8,7 +8,7 @@ int main()
 {
     
     std::shared_ptr<sf::RenderWindow> window = std::make_shared<sf::RenderWindow>
-                                               (sf::VideoMode(700, 500), "SFML works!");
+                                               (sf::VideoMode(900, 600), "SFML works!");
 
     if(! ImGui::SFML::Init(*window)){
         return -1;
@@ -31,6 +31,8 @@ int main()
                 window->close();
         }
 
+        ImGuiIO &io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         ImGui::SFML::Update(*window, delta.restart());
 
         window->clear();
