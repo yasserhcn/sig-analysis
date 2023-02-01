@@ -53,11 +53,15 @@ public:
     ~disp();
 private:
 
+    // pointer to the main window
     std::shared_ptr<sf::RenderWindow> window;
 
+    // waveform class
     std::unique_ptr<waveForm> waveFormWindow;
+    // waterfall class (fft)
     std::unique_ptr<waterFall> waterfallWindow;
 
+    // class containing all the data (currently waveform and fft)
     std::shared_ptr<signalData> data;
 
     enum windowEvents
@@ -78,19 +82,25 @@ private:
         waveformTab = 0,
         waterfallTab = 1
     };
-    
+
+    // name of the file that is currently open
     std::string fileName;
 
+    // the current opened tab
     int currentTab = waveformTab;
 
     bool mouseIsDown;
 
+    // current window view (used for moving around)
     sf::View currentView;
 
+    // amount of movement that is done by the keyboard
     float moveAmount = 50;
 
+    // debug string that are displayed at the bottom of the window
     std::vector<std::string> debugStrings;
 
+    // posittion of the time scale (temporary and will be changed)
     int timeScalePosition = 10;
 
     /**
