@@ -75,8 +75,8 @@ private:
 
     enum tabs
     {
-        waveformTab,
-        waterfallTab
+        waveformTab = 0,
+        waterfallTab = 1
     };
     
     std::string fileName;

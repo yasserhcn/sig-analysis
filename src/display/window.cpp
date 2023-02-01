@@ -88,6 +88,7 @@ void disp::event(sf::Event e)
 
 void disp::openWavFile(std::string path)
 {
+    //TODO: add automatic calculation of fft and a loading bar in gui
     Wav file(path);
     if( !file.checkValid()){
         addDebugText("opening file at path : " + path +" failed");
@@ -175,12 +176,22 @@ void disp::drawUI()
     }
 
     // current window settings
+    //TODO: change to a combo box
+    //TODO: and add a loading bar after it (uses a variable that's shared by the fft thread)
     ImGui::Separator();
-    if(ImGui::Button("waveform")){
-        currentTab = waveformTab;
-    }
-    if(ImGui::Button("waterfall")){
-        currentTab = waterfallTab;
+    ImGui::Text("current window");
+    const char *windows[] = {"waveform", "waterfall"};
+    const char *currentVisibleValue = windows[currentTab];
+    if(ImGui::BeginCombo("current window", currentVisibleValue))
+    {
+        for(int i = 0; i < IM_ARRAYSIZE(windows); i++)
+        {
+            const bool isSelected = (currentTab == i);
+            if(ImGui::Selectable(windows[i], isSelected)){
+                currentTab = i;
+            }
+        }
+        ImGui::EndCombo();
     }
 
     // move settings 
