@@ -1,0 +1,13 @@
+- separate ui/window dpending on what display you're currently looking at
+    each tab class should have a drawUI function that deals with it
+    it's a virtual function from the parent class
+- add windowing to the fft, and make the wnidow scale or idk resizeable (idk check baudline)
+- add an amplitude average graph to the ui
+- add ability to select separate frequencies and ifft them to see their waveform
+    should work with LPF and HPF (those are filters) and an ifft that puts it to
+    a temporary storage area (preferably the data class)
+- add ability to select multiple frequencies and be able to quick swap between them
+    no matter what tab you're in, they're global
+    perhaps the data class keep track of them (that's gonna take a whole bunch of memory)
+- add ability to do operations on those waveforms (idk what it'll be usefull for but maybe
+    it'll work when dealing with IQ data or something similar)

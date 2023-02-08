@@ -176,8 +176,7 @@ void disp::drawUI()
     }
 
     // current window settings
-    //TODO: change to a combo box
-    //TODO: and add a loading bar after it (uses a variable that's shared by the fft thread)
+    //TODO: add a loading bar after it (uses a variable that's shared by the fft thread)
     ImGui::Separator();
     ImGui::Text("current window");
     const char *windows[] = {"waveform", "waterfall"};
