@@ -19,11 +19,15 @@ void waterFall::recalculateFft()
     
     for (int j = 0; j < fftDuration; j++)
     {
-
         for (int i = 0; i < fftsize; i++)
         {
             std::complex<float> dataPoint;
             dataPoint.real(getData()->getWaveformData(i + (j * fftOffset)));
+
+            // apply blackman harris
+            // TODO: add ability to change the windowing fundtion to the UI
+            dataPoint.real(applyBlackmanHarrisToSingleValue(dataPoint.real(), fftsize, i));
+
             tempData->push_back(dataPoint);
         }
         fftData.push_back(fft(tempData, fftsize));

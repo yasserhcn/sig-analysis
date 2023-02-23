@@ -1,6 +1,7 @@
 #pragma once
 
 #include <display/tab.hpp>
+#include <dsp/windowing.hpp>
 
 class waterFall : public tab
 {
