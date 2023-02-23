@@ -6,6 +6,8 @@
 #include <files/openWav.hpp>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <display/data.hpp>
+#include <display/tabs/waterfall.hpp>
+#include <display/tabs/waveform.hpp>
 
 class disp
 {
