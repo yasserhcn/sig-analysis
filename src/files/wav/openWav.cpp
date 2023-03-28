@@ -51,9 +51,11 @@ uint32_t Wav::getSampleRate()
 uint64_t Wav::getSample(uint32_t position, uint8_t channel)
 {
     if(channel > fmtChunk.numChannels){
+        throw std::invalid_argument("invalid audio channel");
         return -1;
     }
     if(position > getAmountOfSamples()){
+        throw std::invalid_argument("sample out of bound");
         return -1;
     }
     return channels[channel].get()[position];
@@ -70,8 +72,7 @@ bool Wav::checkValid()
     CHECK_BOOL(isValid, checkFmtId());
     CHECK_BOOL(isValid, checkData());
 
-    //TODO throw exception if value is false
-
+    fail = !isValid;
     return isValid;
 }
 
