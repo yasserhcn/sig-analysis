@@ -26,4 +26,4 @@ dataBuf applyBlackmanHarris(dataBuf buf, float a0 = 0.35875, float a1 = 0.48829,
  * @param bufferIndex current index in the buffer
  * @return float value after being passed to the windowing function
  */
-float applyBlackmanHarrisToSingleValue(float value, int bufferSize, int bufferIndex);
+double applyBlackmanHarrisToSingleValue(double value, int bufferSize, int bufferIndex);

@@ -13,19 +13,18 @@ waterFall::waterFall(std::shared_ptr<signalData> dataIn)
 void waterFall::recalculateFft()
 {
     // recalculate the fft data
-    std::shared_ptr<std::vector<std::complex<float>>> tempData = std::make_shared<std::vector<std::complex<float>>>();
+    std::shared_ptr<std::vector<std::complex<double>>> tempData = std::make_shared<std::vector<std::complex<double>>>();
     int fftDuration = getData()->getWaveformSize() / fftOffset;
-
     
     for (int j = 0; j < fftDuration; j++)
     {
         for (int i = 0; i < fftsize; i++)
         {
-            std::complex<float> dataPoint;
+            std::complex<double> dataPoint;
             dataPoint.real(getData()->getWaveformData(i + (j * fftOffset)));
 
             // apply blackman harris
-            // TODO: add ability to change the windowing fundtion to the UI
+            // TODO: add ability to change the windowing function to the UI
             dataPoint.real(applyBlackmanHarrisToSingleValue(dataPoint.real(), fftsize, i));
 
             tempData->push_back(dataPoint);
@@ -46,9 +45,9 @@ void waterFall::recalculateFft()
         for (int x = 0; x < fftsize; x++)
         {
             sf::Color pixel(0, 0, 0, 255);
-            pixel.r = fftData[y]->at(x).real() / 20;
-            pixel.g = fftData[y]->at(x).real() / 20;
-            pixel.b = fftData[y]->at(x).real() / 20;
+            pixel.r = std::abs(fftData[y]->at(x).real()) / 20;
+            pixel.g = std::abs(fftData[y]->at(x).real()) / 20;
+            pixel.b = std::abs(fftData[y]->at(x).real()) / 20;
 
             fftImage.setPixel(x, y, pixel);
         }

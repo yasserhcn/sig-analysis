@@ -76,7 +76,7 @@ public:
 private:
     std::vector<int64_t> dataPoints;
 
-    std::vector<std::shared_ptr<std::vector<std::complex<float>>>> fftData;
+    std::vector<std::shared_ptr<std::vector<std::complex<double>>>> fftData;
 
     sf::Sprite fftSprite;
     sf::Image fftImage;
