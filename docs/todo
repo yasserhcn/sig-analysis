@@ -1,3 +1,6 @@
+- add logging, both verbose and normal to be able to track issues
+- refactor code and use the new code structure
+
 - separate ui/window dpending on what display you're currently looking at
     each tab class should have a drawUI function that deals with it
     it's a virtual function from the parent class
