@@ -15,6 +15,7 @@ int wav::test1()
     assert(file.checkValid() == true);
 
     std::cout<<"test 1 passed successfully"<<std::endl;
+    return 0;
 }
 
 int wav::test2()
@@ -26,6 +27,7 @@ int wav::test2()
     assert(file.getFileSize() == FILE_SIZE_BYTES);
 
     std::cout<<"test 2 passed successfully"<<std::endl;
+    return 0;
 }
 
 int wav::test3()
@@ -39,4 +41,5 @@ int wav::test3()
     assert(file.getSampleRate() == FILE_SAMPLE_RATE);
 
     std::cout<<"test 3 passed successfully"<<std::endl;
+    return 0;
 }
