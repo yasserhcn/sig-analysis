@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include <files/openWav.hpp>
+#include <files/wav/openWav.hpp>
 #include <display/window.hpp>
 #include "imgui/imgui.h"
 #include "imgui-sfml/imgui-SFML.h"

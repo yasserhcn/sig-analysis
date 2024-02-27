@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <display/tab.hpp>
 #include <memory>
-#include <files/openWav.hpp>
+#include <files/wav/openWav.hpp>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <display/data.hpp>
 #include <display/tabs/waterfall.hpp>
